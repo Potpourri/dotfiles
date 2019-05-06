@@ -18,7 +18,7 @@ max_line_length = 100
 # tab_width and indent_width is not used, instead you can set your preferred indentation width
 # in editor and browser, see my examples:
 # Spacemacs: ./spacemacs/spacemacs
-# Firefox: ...
+# Firefox: ./firefox/userContent.css
 
 # Nix lang
 # code style: https://nixos.org/nixpkgs/manual/#sec-syntax

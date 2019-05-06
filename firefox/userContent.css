@@ -1,0 +1,18 @@
+/* Set tab width everywhere */
+pre {
+	-moz-tab-size: 2;
+}
+
+/* Set tab width in Github */
+@-moz-document domain(github.com) {
+	.tab-size {
+		-moz-tab-size: 2 !important;
+	}
+}
+
+/* Set tab width in Gitlab */
+@-moz-document domain(gitlab.com) {
+	code {
+		-moz-tab-size: 2;
+	}
+}
