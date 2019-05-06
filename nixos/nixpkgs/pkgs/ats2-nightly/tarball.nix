@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = https://github.com/githwxi/ATS-Postiats.git;
-    rev = "deb79345bb3f622b1e89e58a288f118bccf4027c";
-    sha256 = "0zvxawnnfdn5x2idp76i11xxv90m8nzqcvjbhhwl09glavcg0q0k";
+    rev = "6034e714794a767870b366ee85406a8269fb1996";
+    sha256 = "15kbagqhbzbsv23559lc18ymkkhc2b4xkymbdk93fvg2xxiva02k";
   };
 
   buildInputs = [
