@@ -3,6 +3,7 @@ set -o errexit -o nounset -o pipefail
 
 USER_NAME=john
 USER_HOME="/home/$USER_NAME"
+FX_PROFILE=f7n6ach2.default-1440499338170
 
 error() {
 	local msg="$1"
@@ -67,6 +68,8 @@ main() {
 	copy "$dotfiles_root"/cups/printers.conf                    /etc/cups/printers.conf
 	# ALSA
 	copy "$dotfiles_root"/alsa/asound.state                     /var/lib/alsa/asound.state
+	# Firefox
+	link "$dotfiles_root"/firefox/userContent.css               "$USER_HOME"/.mozilla/firefox/"$FX_PROFILE"/chrome/userContent.css
 }
 
 main
