@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+error() {
+	local msg="$1"
+	echo "$(tput setaf 1)ERROR:$(tput sgr0) $msg" >&2
+	exit 1
+}
+
+info() {
+	local msg="$1"
+	echo "$(tput setaf 4)INFO:$(tput sgr0) $msg"
+}
+
+main() {
+	if (( "$EUID" == 0 )); then
+		error "This script must be run as regular user (non-root)"
+	fi
+	cd /tmp
+
+	info "Creating /tmp/backup-junk"
+	mkdir backup-junk
+	cp -r --parents ~/Projects/eclipse/default.nix backup-junk/  # Eclipse Nix environment
+	bsdtar -cPJf backup-junk/spacemacs.tar.xz ~/.emacs.d/        # my Spacemacs fork
+
+	info "Mounting mailrucloud"
+	marcfs /cloud/mailrucloud
+
+	info "Syncing mailrucloud"
+	rsync -av --delete --size-only backup-junk /cloud/mailrucloud
+	info "Syncing yadisk"
+	rclone sync backup-junk yadisk:/backup-junk
+	info "Syncing gdrive"
+	rclone sync backup-junk gdrive:/backup-junk
+	info "Syncing meganz"
+	rclone sync backup-junk meganz:/backup-junk
+
+	info "Unmounting mailrucloud"
+	fusermount -u /cloud/mailrucloud
+	rm -rf backup-junk
+}
+
+main

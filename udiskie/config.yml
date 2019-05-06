@@ -1,0 +1,7 @@
+device_config:
+  # ignore floppy
+  - device_file: /dev/fd0
+    ignore: true
+  # unignore MemoryStick
+  - device_file: /dev/sdf1
+    ignore: false

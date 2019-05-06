@@ -1,0 +1,6 @@
+[user]
+	email = nikita_belyakov@outlook.com
+	name = Potpourri
+	signingkey = 770F11EF42964A6F
+[commit]
+	gpgsign = true

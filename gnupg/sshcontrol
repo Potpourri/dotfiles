@@ -1,0 +1,4 @@
+# List of allowed ssh keys. Only keys present in this file are used
+# in the SSH protocol. The ssh-add tool may add new entries to this
+#
+630E4A1D8FD83C0AD7A98530931F39383E933DB1

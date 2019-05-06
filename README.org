@@ -1,0 +1,20 @@
+#+STARTUP: showall
+* Potpourri dotfiles
+
+** What are dotfiles?
+
+Dotfiles is a repository containing all system configs for quick backup\restore,
+syncronization between machines and tracking changes.
+
+See [[https://dotfiles.github.io][dotfiles.github.io]]
+
+** Overview
+
+This repository is used in conjunction with local repository =secrets=,
+which contains private data.
+
+My setup: [[https://nixos.org][NixOS]] + [[https://github.com/timor/spacemacsOS][SpacemacsOS layer]] ([[https://github.com/ch11ng/exwm][EXWM]]) + [[http://spacemacs.org][Spacemacs]].
+
+** License
+
+[[./LICENSE][MIT]]

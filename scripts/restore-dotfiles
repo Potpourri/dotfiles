@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+USER_NAME=john
+USER_HOME="/home/$USER_NAME"
+
+error() {
+	local msg="$1"
+	echo "$(tput setaf 1)ERROR:$(tput sgr0) $msg" >&2
+	exit 1
+}
+
+success() {
+	local msg="$1"
+	echo "$(tput setaf 2)SUCCESS:$(tput sgr0) $msg"
+}
+
+link() {
+	local link_to="$1"
+	local link_path="$2"
+	if [[ ! -e "$link_to" ]]; then
+		error "Path don't exist: $link_to"
+	fi
+	if [[ "$link_path" == "$USER_HOME"* ]]; then
+		sudo -u "$USER_NAME" ln -sf "$link_to" "$link_path"
+	else
+		ln -sf "$link_to" "$link_path"
+	fi
+	success "Created symlink: $link_path → ${link_to#"$USER_HOME/Projects/"}"
+}
+
+copy() {
+	local from="$1"
+	local to="$2"
+	cp "$from" "$to"
+	success "Copied: $from → $to"
+}
+
+main() {
+	local dotfiles_root
+	if (( "$EUID" != 0 )); then
+		error "This script must be run as root"
+	fi
+	dotfiles_root="$( dirname "$( dirname "$( realpath "${BASH_SOURCE[0]}" )" )" )"
+
+	# NixOS
+	link "$dotfiles_root"/nixos/configuration.nix               /etc/nixos/configuration.nix
+	link "$dotfiles_root"/nixos/nix-channels                    "$USER_HOME"/.nix-channels
+	link "$dotfiles_root"/nixos/nixpkgs                         "$USER_HOME"/.config/nixpkgs
+	# Spacemacs
+	link "$dotfiles_root"/spacemacs/spacemacs                   "$USER_HOME"/.spacemacs
+	# XDG
+	link "$dotfiles_root"/xdg/user-dirs.dirs                    "$USER_HOME"/.config/user-dirs.dirs
+	link "$dotfiles_root"/xdg/mimeapps.list                     "$USER_HOME"/.config/mimeapps.list
+	link "$dotfiles_root"/xdg/applications/emacsclient.desktop  "$USER_HOME"/.local/share/applications/emacsclient.desktop
+	# GTK
+	link "$dotfiles_root"/gtk/gtkrc-2.0                         "$USER_HOME"/.gtkrc-2.0
+	link "$dotfiles_root"/gtk/gtk-3.0-settings.ini              "$USER_HOME"/.config/gtk-3.0/settings.ini
+	# GnuPG
+	link "$dotfiles_root"/gnupg/gpg-agent.conf                  "$USER_HOME"/.gnupg/gpg-agent.conf
+	link "$dotfiles_root"/gnupg/sshcontrol                      "$USER_HOME"/.gnupg/sshcontrol
+	# Git
+	link "$dotfiles_root"/git/gitconfig                         "$USER_HOME"/.gitconfig
+	# Udiskie
+	link "$dotfiles_root"/udiskie/config.yml                    "$USER_HOME"/.config/udiskie/config.yml
+	# CUPS
+	copy "$dotfiles_root"/cups/printers.conf                    /etc/cups/printers.conf
+	# ALSA
+	copy "$dotfiles_root"/alsa/asound.state                     /var/lib/alsa/asound.state
+}
+
+main

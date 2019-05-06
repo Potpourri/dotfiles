@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+error() {
+	local msg="$1"
+	echo "$(tput setaf 1)ERROR:$(tput sgr0) $msg" >&2
+	exit 1
+}
+
+main() {
+	if (( "$EUID" != 0 )); then
+		error "This script must be run as root"
+	fi
+	cd /tmp
+	systemctl stop apcupsd
+	apctest -f $(find /nix/store -maxdepth 1 -name \*-apcupsd.conf)
+	systemctl start apcupsd
+	sleep 5
+	apcaccess
+	rm apctest.output
+}
+
+main
