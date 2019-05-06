@@ -23,9 +23,9 @@ link() {
 		error "Path don't exist: $link_to"
 	fi
 	if [[ "$link_path" == "$USER_HOME"* ]]; then
-		sudo -u "$USER_NAME" ln -sf "$link_to" "$link_path"
+		sudo -u "$USER_NAME" ln -sf --no-dereference "$link_to" "$link_path"
 	else
-		ln -sf "$link_to" "$link_path"
+		ln -sf --no-dereference "$link_to" "$link_path"
 	fi
 	success "Created symlink: $link_path → ${link_to#"$USER_HOME/Projects/"}"
 }
@@ -47,7 +47,7 @@ main() {
 	# NixOS
 	link "$dotfiles_root"/nixos/configuration.nix               /etc/nixos/configuration.nix
 	link "$dotfiles_root"/nixos/nix-channels                    "$USER_HOME"/.nix-channels
-	link "$dotfiles_root"/nixos/nixpkgs                         "$USER_HOME"/.config/nixpkgs
+	link "$dotfiles_root"/nixos/nixpkgs/                        "$USER_HOME"/.config/nixpkgs
 	# Spacemacs
 	link "$dotfiles_root"/spacemacs/spacemacs                   "$USER_HOME"/.spacemacs
 	# XDG
