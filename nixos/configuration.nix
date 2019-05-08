@@ -30,7 +30,7 @@ in
   ##################################################################################################
 
   boot = {
-    #kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_latest;
     cleanTmpDir = true;
     loader = {
       timeout = 1;

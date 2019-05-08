@@ -2,6 +2,7 @@ self: super:
 
 let
   inherit (super)
+    lib
     callPackage
     fetchurl;
 in
@@ -27,18 +28,16 @@ in
   });
   */
 
-  /*
   linuxPackages_latest = super.linuxPackages_latest.extend(_self: _super: {
-    nvidia_x11 = callPackage (import ../pkgs/nvidia-x11/generic.nix {
-      version = "415.25";
-      sha256_64bit = "0jck3sjhkdf9j40fqa6hpm2m9i11bfka9diaxmk2apni4f4mpdk4";
-      settingsSha256 = "0x5a9dhr29g67rbgl1w973fzgjfg1lyn3dpq7fpc7chfp91vxzrp";
-      persistencedSha256 = "0z1d7hrz7zvi4x3ir1c3gcfpsj57wdr5pylvmjhdi3x47cb1w34f";
+    nvidia_x11 = callPackage (import <nixpkgs/pkgs/os-specific/linux/nvidia-x11/generic.nix> {
+      version = "418.74";
+      sha256_64bit = "03qj42ppzkc9nphdr9zc12968bb8fc9cpcx5f66y29wnrgg3d1yw";
+      settingsSha256 = "15mbqdx5wyk7iq13kl2vd99lykpil618izwpi1kfldlabxdxsi9d";
+      persistencedSha256 = "0442qbby0r1b6l72wyw0b3iwvln6k20s6dn0zqlpxafnia9bvc8c";
     }) {
-      kernel = self.linuxPackages_latest.kernel;
+      inherit (_self) kernel;
     };
   });
-  */
 
   /*
   linuxPackages_latest = super.linuxPackages_latest.extend(_self: _super: {
