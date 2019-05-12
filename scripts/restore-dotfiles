@@ -19,12 +19,16 @@ success() {
 link() {
 	local link_to="$1"
 	local link_path="$2"
+	local link_dir
+	link_dir="$(dirname "$link_path")"
 	if [[ ! -e "$link_to" ]]; then
 		error "Path don't exist: $link_to"
 	fi
 	if [[ "$link_path" == "$USER_HOME"* ]]; then
+		sudo -u "$USER_NAME" mkdir -p "$link_dir"
 		sudo -u "$USER_NAME" ln -sf --no-dereference "$link_to" "$link_path"
 	else
+		mkdir -p "$link_dir"
 		ln -sf --no-dereference "$link_to" "$link_path"
 	fi
 	success "Created symlink: $link_path → ${link_to#"$USER_HOME/Projects/"}"
