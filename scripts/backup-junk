@@ -16,12 +16,17 @@ main() {
 	if (( "$EUID" == 0 )); then
 		error "This script must be run as regular user (non-root)"
 	fi
-	cd /tmp
+	cd
 
-	info "Creating /tmp/backup-junk"
+	info "Creating ~/backup-junk/"
 	mkdir backup-junk
-	cp -r --parents ~/Projects/eclipse/default.nix backup-junk/  # Eclipse Nix environment
-	bsdtar -cPJf backup-junk/spacemacs.tar.xz ~/.emacs.d/        # my Spacemacs fork
+	mkdir backup-junk/eclipse
+	# Eclipse Nix environment
+	cp -v                    ~/Projects/eclipse/default.nix  backup-junk/eclipse/default.nix
+	# my Spacemacs fork
+	bsdtar -cJf -            ~/.emacs.d/                   > backup-junk/spacemacs.tar.xz
+	# VirtualBox VMs (winxp32sp3, ...)
+	cp -vr --reflink=always  ~/"VirtualBox VMs"/             backup-junk/"VirtualBox VMs"
 
 	info "Mounting mailrucloud"
 	marcfs /cloud/mailrucloud
@@ -37,7 +42,7 @@ main() {
 
 	info "Unmounting mailrucloud"
 	fusermount -u /cloud/mailrucloud
-	rm -rf backup-junk
+	rm -rf backup-junk/
 }
 
 main
