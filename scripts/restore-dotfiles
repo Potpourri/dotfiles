@@ -33,7 +33,15 @@ link() {
 copy() {
 	local from="$1"
 	local to="$2"
-	cp "$from" "$to"
+	local to_dir
+	to_dir="$(dirname "$to")"
+	if [[ "$to" == "$USER_HOME"* ]]; then
+		sudo -u "$USER_NAME" mkdir -p "$to_dir"
+		sudo -u "$USER_NAME" cp "$from" "$to"
+	else
+		mkdir -p "$to_dir"
+		cp "$from" "$to"
+	fi
 	success "Copied: ${from#"$USER_HOME/Projects/"} → $to"
 }
 
@@ -72,6 +80,8 @@ main() {
 	link "$dotfiles_root"/firefox/userContent.css               "$USER_HOME"/.mozilla/firefox/"$FX_PROFILE"/chrome/userContent.css
 	# RetroArch
 	link "$dotfiles_root"/retroarch/retroarch.cfg               "$USER_HOME"/.config/retroarch/retroarch.cfg
+	# VirtualBox
+	copy "$dotfiles_root"/virtualbox/VirtualBox.xml             "$USER_HOME"/.config/VirtualBox/VirtualBox.xml
 }
 
 main
