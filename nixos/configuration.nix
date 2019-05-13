@@ -4,7 +4,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  secrets = import ../../secrets/nixos/secrets.nix;
+  secrets = import ../secrets/nixos/secrets.nix;
 in
 
 {
