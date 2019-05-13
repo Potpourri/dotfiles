@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+trap cleanup EXIT ERR INT TERM
+
+DOTFILES_ROOT="$( dirname "$( dirname "$( realpath "${BASH_SOURCE[0]}" )" )" )"
+
+error() {
+	local msg="$1"
+	echo "$(tput setaf 1)ERROR:$(tput sgr0) $msg" >&2
+	exit 1
+}
+
+success() {
+	local msg="$1"
+	echo "$(tput setaf 2)SUCCESS:$(tput sgr0) $msg"
+}
+
+info() {
+	local msg="$1"
+	echo "$(tput setaf 4)INFO:$(tput sgr0) $msg"
+}
+
+cleanup() {
+	cd "$DOTFILES_ROOT"
+	git config commit.gpgsign true
+}
+
+main() {
+	if (( "$EUID" == 0 )); then
+		error "This script must be run as regular user (non-root)"
+	fi
+	cd "$DOTFILES_ROOT"
+	git config commit.gpgsign false
+
+	if [[ "$(git status --porcelain --untracked-files=no --ignore-submodules)" ]]; then
+		error "'dotfiles' has uncommitted changes"
+	fi
+	cd secrets
+	if [[ "$(git status --porcelain)" ]]; then
+		error "'secrets' has uncommitted changes"
+	fi
+	cd -
+	if [[ "$(git status --porcelain | grep -E ' secrets$')" ]]; then
+		info "Updating 'secrets' submodule"
+		git commit -am "Update 'secrets' submodule"
+	fi
+
+	info "Updating 'spacemacs/emacs.d' subtree"
+	git fetch spacemacs develop
+	git subtree pull --squash --prefix spacemacs/emacs.d spacemacs develop \
+		-m "Merge 'spacemacs/emacs.d' subtree"
+
+	info "Updating 'spacemacs/emacs.d/private/local/exwm' subtree"
+	git fetch spacemacs-os master
+	git subtree pull --squash --prefix spacemacs/emacs.d/private/local/exwm spacemacs-os master \
+		-m "Merge 'spacemacs/emacs.d/private/local/exwm' subtree"
+
+	success "All subtree\submodules updated"
+}
+
+main
