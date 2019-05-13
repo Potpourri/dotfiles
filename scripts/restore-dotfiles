@@ -62,6 +62,7 @@ main() {
 	link "$dotfiles_root"/nixos/nixpkgs/                        "$USER_HOME"/.config/nixpkgs
 	# Spacemacs
 	link "$dotfiles_root"/spacemacs/spacemacs                   "$USER_HOME"/.spacemacs
+	link "$dotfiles_root"/spacemacs/emacs.d/                    "$USER_HOME"/.emacs.d
 	# XDG
 	link "$dotfiles_root"/xdg/user-dirs.dirs                    "$USER_HOME"/.config/user-dirs.dirs
 	link "$dotfiles_root"/xdg/mimeapps.list                     "$USER_HOME"/.config/mimeapps.list

@@ -23,8 +23,6 @@ main() {
 	mkdir backup-junk/eclipse
 	# Eclipse Nix environment
 	cp -v                    ~/Projects/eclipse/default.nix  backup-junk/eclipse/default.nix
-	# my Spacemacs fork
-	bsdtar -cJf -            ~/.emacs.d/                   > backup-junk/spacemacs.tar.xz
 	# VirtualBox VMs (winxp32sp3, ...)
 	cp -vr --reflink=always  ~/"VirtualBox VMs"/             backup-junk/"VirtualBox VMs"
 
