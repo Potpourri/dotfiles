@@ -9,13 +9,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "ATS2-Postiats-gmp-${version}";
+  name = "ATS2-Postiats-gmp-${version}";
   inherit version;
 
   src = fetchgit {
     url = https://github.com/githwxi/ATS-Postiats.git;
-    rev = "6034e714794a767870b366ee85406a8269fb1996";
-    sha256 = "15kbagqhbzbsv23559lc18ymkkhc2b4xkymbdk93fvg2xxiva02k";
+    rev = "3efbfb4e4a9e1ef51dd5553fe6970a955580020c";
+    sha256 = "14qsh6q1grigxc2w71955l2jyqyv8hnyjwsxa4c1k55xb7mjxwv6";
   };
 
   buildInputs = [
