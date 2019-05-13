@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "0gix4v16vlr9wlhzsfxbn77ihzz7hqvrl2cjj1a62lskr5qqhqrj";
+    sha256 = "026720z0vpiwr4da7l2x2yinns09fmg6yxsib203xwnixj399azi";
     rev = "v${version}";
   };
 
