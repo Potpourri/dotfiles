@@ -1,0 +1,182 @@
+* EXWM contribution layer for Spacemacs
+
+** Table of Contents                                                  :TOC@4:
+- [[#exwm-contribution-layer-for-spacemacs][EXWM contribution layer for Spacemacs]]
+  - [[#description][Description]]
+  - [[#install][Install]]
+    - [[#note-about-display-managers][Note about Display Managers]]
+    - [[#not-having-display-managers][Not having Display Managers]]
+    - [[#osx][OSX]]
+  - [[#key-bindings][Key bindings]]
+- [[#window-behaviour-regarding-char-and-line-mode][Window behaviour regarding char and line mode]]
+  - [[#line-mode][Line mode]]
+  - [[#char-mode][Char mode]]
+  - [[#implementation-strategy][Implementation Strategy]]
+
+** Description
+
+*Fork Note:*  This layer is based on CestDiego's PR from
+https://github.com/syl20bnr/spacemacs/pull/3321.
+
+The time has arrived when one can finally use Emacs as a Window Manager, long
+ago the concepts of *windows* and *frames* made so much sense when one was
+working in a TTY, and basically that's all the window management you got. In
+these *modern* times though, it sounds silly to have those names. But not
+Anymore!
+
+Thanks to @ch11ng and his [[https://github.com/ch11ng/exwm][EXWM]] project we can now use Emacs as our window
+manager, and all those *windows* that didn't make sense before, now can not only
+hold buffers, but X Windows, that means that you can spawn a Browser Window, or
+your music player, or anything.
+
+I urge you to read the [[https://github.com/ch11ng/exwm/wiki][EXWM Wiki]] for a more in depth explanation and if you can
+contribute, please do so! The purpose of me making this layer is that I find it
+awesome and having nice defaults would make more people dive into it and the
+project would receive more attention and contributions which will only make it
+more awesome, so if you try it and like it, share it!
+
+This is how it looks like:
+
+[[img/spacemacsOS.jpg]]
+
+** Install
+To use this contribution,
+- place this repository in one of Spacemacs' layer directories
+  (~/.emacs.d/private/local/exwm, ~/.spacemacs.d/private/exwm, or ~/.spacemacs.d/layers/exwm)
+- add the layer in your =~/.spacemacs=
+
+#+begin_src emacs-lisp
+  (setq-default dotspacemacs-configuration-layers '(exwm))
+#+end_src
+
+*** Note about Display Managers
+
+This is most common among Ubuntu and derivative users:
+
+LightDM, GDM, and other Display managers that need a session file will need you
+to copy the [[file:files/exwm.desktop][desktop file]] I bundled with this layer to
+~/usr/local/xsessions/exwm.desktop~, that's what I used on my Ubuntu box, but
+make sure the [[file:files/exwm-start][exwm-start script]] is in your PATH, you can put it in
+~/usr/local/bin/exwm-start~ and that should be enough, next time you log out,
+select the EXWM session instead of the Ubuntu one and you should be alright.
+
+*** Not having Display Managers
+
+If you use Arch, Gentoo, or any other Linux, most probably you'll start your
+configurations via a ~.xinitrc~ file, just append ~exwm-start~ to the end of
+that file and you should be fine. I do recommend to check the [[https://github.com/ch11ng/exwm/wiki][EXWM Wiki]] for more
+details.
+
+*** OSX
+
+If you are an OSX user, please report back on whether this works with xQuartz,
+always back up your data before attempting to try stuff like this.
+
+** Key bindings
+
+As other window managers the ~s~ or *Super* key (Windows Key) is the one that
+is the prefix to every action. We'll use a lot of ~s~.
+
+I have, for convenience, disabled the use of ~C-x~ and ~C-c~ in X windows,
+mainly because that's something we could use for Cutting and Copying text, but if
+you want you can enable it, this layer focuses on less Emacs-y bindings.
+
+| Key Binding           | Description                                    |
+|-----------------------+------------------------------------------------|
+| ~C-q~                 | Send next key pressed to the X window          |
+| ~C-g~                 | Universal GetMeOuttaHere Key from Emacs        |
+| ~C-u~                 | Universal Argument                             |
+| ~C-[0-9]~             | Universal Prefix for [0-9]                     |
+| ~SPC~                 | Spacemacs Leader Key (in line mode)            |
+| ~M-m~                 | Spacemacs Leader Key (in line mode)            |
+| ~s-SPC~               | Spacemacs Leader Key (in char and line mode)   |
+| ~i~                   | Switch to EXWM char mode                       |
+| ~s-[1 2 3 ... 8 9 0]~ | Switch to workspace [1 2 3 ... 8 9 10]         |
+| ~s-TAB~               | Switch to last workspace                       |
+| ~s-w~                 | Workspace Switch Menu (kinda like micro-state) |
+| ~s-ESC~               | Reset window state (gets you out of char mode) |
+| ~s-r~                 | App Launcher                                   |
+| ~s-pause~             | Lock Screen                                    |
+| ~s-u,U~               | Undo, Redo window configurations               |
+| ~s-b~                 | Select and switch to buffer                    |
+| ~s-q~                 | Close current buffer                           |
+| ~s-h,j,k,l~           | Switch to left,lower,upper,right window        |
+| ~s-H,J,K,L~           | Move window to far left,down,lower,upper,right |
+| ~M-s-h,j,k,l~         | Resizing (try them, it's too hard to explain)  |
+| ~s-[,]~               | Switch to prev,next workspace                  |
+
+Since running programs is one of the more common task, some explicit support is
+provided for that via the leader key ~SPC &~.
+
+For these commands as well as for ~s-r~ the working directory is set to the
+value of =user-home-directory= for the started process.
+
+| Key Binding | Description                                                               |
+|-------------+---------------------------------------------------------------------------|
+| ~SPC & s~   | Ask for program to run in separate window below current window            |
+| ~SPC & v~   | Ask for program to run in separate window to the right of current window. |
+
+* Window behaviour regarding char and line mode
+
+** Line mode
+ EXWM X windows come up in char mode per default. This means that all input is
+ redirected to the application per default, and only the =s-= keybindings work.
+ In line mode, only a select set of keys that work in other normal-mode buffers
+ work in line-mode EXWM buffers, because X applications could use any valid key
+ sequence for navigating, etc. Basically, only ~i~ and ~SPC~ are working as
+ expected.
+
+** Char mode
+
+ Pressing ~i~ from normal mode gets you into insert mode and
+ simultaneously EXWM char mode, releasing all bindings except the ones starting with
+ ~s~, or *Super*, effectively giving full control to the X window. To switch back
+ to line mode, use ~s-r~.
+
+** Implementation Strategy
+Generally, whenever a EXWM window is created, it is displayed in char mode, with
+spacemacs being in insert state. When changing to insert-state in EXWM mode,
+char mode should be activated underneath. Likewise, when entering char mode,
+insert state should be activated. When exiting char mode, either by use of
+=exwm-reset= or =exwm-input-grab-keyboard=, the window should return to normal
+state.
+
+Switching to input-state/char mode:
+- bind "i" to switch to char mode
+- advice =exwm-input-release-keyboard= so that insert state is activated when
+  char mode is entered.
+- advice =exwm-input-grab-keyboard= so that normal state is activated when
+  control is given back to spacemacs.
+
+Handling transient states from line mode:
+Transient states are not captured by EXWM's intrinsic
+"currently-inputting-command" detection, and must be activated separately.
+- add hook to all transient state activation functions that enable EXWM input pass-through
+  behaviour
+- add hook to all transient state deactivation functions that disable EXWM input
+  pass-through
+
+Handling transient states from char mode:
+This is a bit more tricky, since char mode has no input-tunneling behavior.
+There is an EXWM-internal mechanism to temporarily enable line mode, but that is
+an implementation detail and not exposed in the interface.
+Currently, whenever a transient state is entered, a hook is executed which
+activates line mode and performs like above.
+
+To be predictable, the following behaviour should probably be implemented:
+- add hook to all transient state activation functions that store which mode (char/line) was
+  active during transient state activation
+- inhibit manual switching to char/line mode, as that would mess up input to
+  transient state
+- switch to line mode
+- proceed as described above
+- add hook such that whenever the buffer is re-entered, the previous mode is
+  restored.  This is necessary because transient state command execution could have exited
+  the window, and the next time the window is entered, the original mode should
+  be restored.  Alternatively, if that proves to be to messy, transient state activation
+  could always be made to change the state back to normal state.
+
+*Update:* The current handling could be more robust against Spacemacs' input
+ state behavior.  At some point™, it will probably make sense to abandon char
+ mode completely, and only use =exwm-input-line-mode-passthrough= to control
+ keyboard focus (see discussion in https://github.com/ch11ng/exwm/issues/352).
