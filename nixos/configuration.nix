@@ -94,6 +94,7 @@ in
     #######################################
     # GUI apps
     #######################################
+    # use binary package to escape rebuild from source
     firefox-bin
     libreoffice-fresh
     #######################################
@@ -156,7 +157,7 @@ in
     autoRepeatInterval = 60;
     # Nvidia GeForce GT 710 driver
     videoDrivers = [ "nvidia" ];
-    xkbOptions = "grp:lwin_toggle,grp_led:scroll,caps:swapescape";
+    xkbOptions = "grp:rwin_toggle,grp_led:scroll,caps:swapescape";
     screenSection = ''
       Option "metamodes" "1280x1024_75 +0+0"
     '';
