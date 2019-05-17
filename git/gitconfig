@@ -4,3 +4,5 @@
 	signingkey = 770F11EF42964A6F
 [commit]
 	gpgsign = true
+[diff "gpg"]
+	textconv = gpg --no-tty --decrypt

@@ -71,6 +71,7 @@ in
     variables = rec {
       VISUAL = "emacsclient";
       EDITOR = VISUAL;
+      PASSWORD_STORE_DIR = toString ../secrets;
     };
   };
 
@@ -104,6 +105,8 @@ in
     tree
     git
     direnv
+    pass
+    passff-host
     # archivers:
     libarchive
     p7zip
