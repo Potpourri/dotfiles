@@ -60,7 +60,7 @@ in
     gconf = super.gnome2.GConf;
   };
 
-  retroarchBare = callPackage ../pkgs/retroarch {
+  retroarchBare = super.libsForQt5.callPackage ../pkgs/retroarch {
     inherit (super.darwin) libobjc;
     inherit (super.darwin.apple_sdk.frameworks) AppKit Foundation;
   };

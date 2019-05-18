@@ -14,6 +14,7 @@
 , enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
 , withVulkan ? stdenv.isLinux, vulkan-loader ? null
 , fetchurl
+, qtbase #Me: add for Desktop UI (enable by F5)
 }:
 
 with stdenv.lib;
@@ -40,7 +41,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ]
                       ++ optional withVulkan [ makeWrapper ];
 
-  buildInputs = [ ffmpeg freetype libxml2 libGLU_combined python3 SDL2 which ]
+  buildInputs = [ ffmpeg freetype libxml2 libGLU_combined python3 SDL2 which qtbase ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
                 ++ optional withVulkan [ vulkan-loader ]
                 ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
