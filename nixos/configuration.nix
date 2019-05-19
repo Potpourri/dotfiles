@@ -181,21 +181,9 @@ in
         xsetroot -cursor_name left_ptr
         export _JAVA_AWT_WM_NONREPARENTING=1
         XDG_DATA_DIRS+=:~/.local/share
+        ${pkgs.gnome3.gnome-settings-daemon}/libexec/gsd-xsettings &
         exec dbus-launch --exit-with-session emacs --fullscreen --eval "(exwm-enable)"
       '';
-    };
-  };
-
-  systemd.user.services.gnome-settings-daemon = {
-    enable = true;
-    description = "gnome-settings-daemon for themes, etc";
-    wantedBy = [ "default.target" ];
-    path = [ pkgs.gnome3.gnome-settings-daemon ];
-    after = [ "display-manager.service" ];
-    serviceConfig = {
-      Restart = "always";
-      RestartSec = 2;
-      ExecStart = "${pkgs.gnome3.gnome-settings-daemon}/libexec/gsd-xsettings";
     };
   };
 
