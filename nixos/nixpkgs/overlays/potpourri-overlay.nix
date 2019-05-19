@@ -74,6 +74,21 @@ in
     };
   });
 
+  pass = super.pass // {
+    withExtensions = exts: (super.pass.withExtensions exts).overrideAttrs(oldA: {
+      preFixup = ''
+        for f in ${lib.last oldA.buildInputs}/share/bash-completion/completions/*; do
+          ln -s $f $out/share/bash-completion/completions/
+        done
+      '';
+    });
+  };
+
+  passExtensions = super.passExtensions // {
+    pass-audit = callPackage ../pkgs/pass/audit.nix { };
+    pass-update = callPackage ../pkgs/pass/update.nix { };
+  };
+
   # new packages
 
   myEmacs = super.emacsWithPackages(epkgs: [

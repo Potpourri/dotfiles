@@ -105,7 +105,11 @@ in
     tree
     git
     direnv
-    pass
+    # pass:
+    (pass.withExtensions (_: with passExtensions; [
+      pass-update
+      pass-audit
+    ]))
     passff-host
     # archivers:
     libarchive
@@ -125,6 +129,8 @@ in
 
   programs.bash = {
     interactiveShellInit = ''
+      source /run/current-system/sw/share/bash-completion/completions/pass-audit
+      source /run/current-system/sw/share/bash-completion/completions/pass-update
       PATH+=:~/Projects/dotfiles/scripts
       eval "$(direnv hook bash)"
     '';
