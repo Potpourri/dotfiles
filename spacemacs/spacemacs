@@ -503,6 +503,10 @@ before packages are loaded."
   (setenv "GPG_TTY" "/dev/tty/7")
   (call-process-shell-command "gpg-connect-agent updatestartuptty /bye")
 
+  ;; open Magit when editing git commit messages
+  (add-to-list 'auto-mode-alist
+    (cons git-commit-filename-regexp #'git-commit-setup))
+
   (defun ls-trash ()
     (interactive)
     (shell-command-to-string "ls -lah ~/.local/share/Trash/files"))
