@@ -2,6 +2,9 @@ device_config:
   # ignore floppy
   - device_file: /dev/fd0
     ignore: true
+  # ignore boot flash
+  - device_id: usb-SMI_USB_DISK-0:0-part1
+    ignore: true
   # unignore MemoryStick
-  - device_file: /dev/sdf1
+  - device_id: usb-Generic_USB_MS_Reader_058F312D8Ac-0:3-part1
     ignore: false
