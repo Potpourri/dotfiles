@@ -18,8 +18,14 @@
   ];
   boot.kernelModules = [ "kvm-intel" ];
 
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-id/usb-SMI_USB_DISK-0:0-part1";
+    fsType = "ext4";
+    neededForBoot = true;
+  };
+
   fileSystems."/" = {
-    device = "/dev/sda";
+    device = "/dev/disk/by-uuid/13bc3b59-95e6-4145-bd2f-36df0de28b02";
     fsType = "btrfs";
     options = [
       "subvol=@"
@@ -27,22 +33,22 @@
     ];
   };
 
-  fileSystems."/home" = {
-    device = "/dev/sda";
-    fsType = "btrfs";
-    options = [
-      "subvol=@home"
-      "compress=zstd"
-    ];
-  };
-
   fileSystems."/nix/store" = {
-    device = "/dev/sda";
+    device = "/dev/disk/by-uuid/13bc3b59-95e6-4145-bd2f-36df0de28b02";
     fsType = "btrfs";
     options = [
       "subvol=@nix@store"
       "compress=zstd"
       "ro"
+    ];
+  };
+
+  fileSystems."/home" = {
+    device = "/dev/disk/by-uuid/13bc3b59-95e6-4145-bd2f-36df0de28b02";
+    fsType = "btrfs";
+    options = [
+      "subvol=@home"
+      "compress=zstd"
     ];
   };
 

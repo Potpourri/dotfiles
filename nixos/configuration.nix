@@ -39,10 +39,7 @@ in
         version = 2;
         extraConfig = "set gfxpayload=keep;";
         gfxmodeBios = "1280x1024-32";
-        devices = [
-          "/dev/sda"
-          "/dev/sdb"
-        ];
+        devices = [ "/dev/disk/by-id/usb-SMI_USB_DISK-0:0" ];
       };
     };
   };
