@@ -162,7 +162,7 @@ in
     # interval between repeating key
     autoRepeatInterval = 60;
     # Nvidia GeForce GT 710 driver
-    videoDrivers = [ "nvidia" ];
+    videoDrivers = [ "nvidiaBeta" ];
     xkbOptions = "grp:rwin_toggle,grp_led:scroll,caps:swapescape";
     screenSection = ''
       Option "metamodes" "1280x1024_75 +0+0"

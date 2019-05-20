@@ -28,6 +28,7 @@ in
   });
   */
 
+  /*
   linuxPackages_latest = super.linuxPackages_latest.extend(_self: _super: {
     nvidia_x11 = callPackage (import <nixpkgs/pkgs/os-specific/linux/nvidia-x11/generic.nix> {
       version = "418.74";
@@ -38,6 +39,7 @@ in
       inherit (_self) kernel;
     };
   });
+  */
 
   /*
   linuxPackages_latest = super.linuxPackages_latest.extend(_self: _super: {
