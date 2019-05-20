@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+USER_NAME=john
+USER_HOME="/home/$USER_NAME"
+
+error() {
+	local msg="$1"
+	echo "$(tput setaf 1)ERROR:$(tput sgr0) $msg" >&2
+	exit 1
+}
+
+success() {
+	local msg="$1"
+	echo "$(tput setaf 2)SUCCESS:$(tput sgr0) $msg"
+}
+
+copy() {
+	local from="$1"
+	local to="$2"
+	install -m 644 -D "$from" "$to"
+	success "Copied: $from → ${to#"$USER_HOME/Projects/"}"
+}
+
+main() {
+	local dotfiles_root
+	if (( "$EUID" == 0 )); then
+		error "This script must be run as regular user (non-root)"
+	fi
+	dotfiles_root="$( dirname "$( dirname "$( realpath "${BASH_SOURCE[0]}" )" )" )"
+
+	# VirtualBox
+	copy "$USER_HOME"/.config/VirtualBox/VirtualBox.xml                        "$dotfiles_root"/virtualbox/VirtualBox.xml
+	# passff-host
+	copy "$(nix path-info nixpkgs.passff-host)"/share/passff-host/passff.json  "$dotfiles_root"/firefox/passff.json
+}
+
+main

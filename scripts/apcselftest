@@ -13,7 +13,7 @@ main() {
 	fi
 	cd /tmp
 	systemctl stop apcupsd
-	apctest -f $(find /nix/store -maxdepth 1 -name \*-apcupsd.conf)
+	apctest -f "$(nix path-info --all | grep -m1 -E '\-apcupsd.conf$')"
 	systemctl start apcupsd
 	sleep 5
 	apcaccess
