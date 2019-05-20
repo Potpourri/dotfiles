@@ -75,6 +75,8 @@ main() {
 	link "$dotfiles_root"/gnupg/sshcontrol                      "$USER_HOME"/.gnupg/sshcontrol
 	# Git
 	link "$dotfiles_root"/git/gitconfig                         "$USER_HOME"/.gitconfig
+	# git-annex
+	link "$dotfiles_root"/git-annex/autostart                   "$USER_HOME"/.config/git-annex/autostart
 	# Udiskie
 	link "$dotfiles_root"/udiskie/config.yml                    "$USER_HOME"/.config/udiskie/config.yml
 	# CUPS

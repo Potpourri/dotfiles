@@ -101,6 +101,8 @@ in
     wget
     tree
     git
+    gitAndTools.git-annex
+    lsof
     direnv
     # pass:
     (pass.withExtensions (_: with passExtensions; [
@@ -259,9 +261,26 @@ in
     wantedBy = [ "default.target" ];
     path = [ pkgs.udiskie ];
     serviceConfig = {
-      Restart = "always";
-      RestartSec = 2;
+      Restart = "on-failure";
+      RestartSec = 5;
       ExecStart = "${pkgs.udiskie}/bin/udiskie --no-notify --no-file-manager";
+    };
+  };
+
+  systemd.user.services.git-annex = {
+    enable = true;
+    description = "git-annex assistant daemon";
+    wantedBy = [ "default.target" ];
+    path = [
+       pkgs.gitAndTools.git-annex
+       pkgs.git
+       pkgs.lsof
+    ];
+    serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = 5;
+      ExecStart = "${pkgs.gitAndTools.git-annex}/bin/git-annex assistant --autostart --foreground";
+      ExecStop = "${pkgs.gitAndTools.git-annex}/bin/git-annex assistant --autostop";
     };
   };
 
