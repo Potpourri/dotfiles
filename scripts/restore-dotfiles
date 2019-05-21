@@ -31,7 +31,7 @@ link() {
 		mkdir -p "$link_dir"
 		ln -sf --no-dereference "$link_to" "$link_path"
 	fi
-	success "Created symlink: $link_path → ${link_to#"$USER_HOME/Projects/"}"
+	success "Created symlink: ${link_path/#"$USER_HOME"/\~} → ${link_to#"$USER_HOME/Projects/"}"
 }
 
 copy() {
@@ -46,7 +46,7 @@ copy() {
 		mkdir -p "$to_dir"
 		cp "$from" "$to"
 	fi
-	success "Copied: ${from#"$USER_HOME/Projects/"} → $to"
+	success "Copied: ${from#"$USER_HOME/Projects/"} → ${to/#"$USER_HOME"/\~}"
 }
 
 main() {
