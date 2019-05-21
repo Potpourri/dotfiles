@@ -91,6 +91,7 @@ in
     pass-update = callPackage ../pkgs/pass/update.nix { };
   };
 
+  #WORKAROUND: https://github.com/NixOS/nixpkgs/pull/61735
   passff-host = super.passff-host.overrideAttrs(oldA: rec {
     name = "passff-host-${version}";
     version = "1.2.1";
