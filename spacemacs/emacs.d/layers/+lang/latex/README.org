@@ -1,10 +1,10 @@
 #+TITLE: LaTeX layer
 
-#+TAGS: layer|uncategorized
+#+TAGS: dsl|layer|markup|programming
 
 [[file:img/latex.png]]
 
-* Table of Contents                     :TOC_4_gh:noexport:
+* Table of Contents                     :TOC_5_gh:noexport:
 - [[#description][Description]]
   - [[#features][Features:]]
 - [[#bibtex][BibTeX]]
