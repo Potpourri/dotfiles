@@ -91,6 +91,22 @@ in
     pass-update = callPackage ../pkgs/pass/update.nix { };
   };
 
+  passff-host = super.passff-host.overrideAttrs(oldA: rec {
+    name = "passff-host-${version}";
+    version = "1.2.1";
+    src = super.fetchFromGitHub {
+      owner = "passff";
+      repo = "passff-host";
+      rev = version;
+      sha256 = "0ydfwvhgnw5c3ydx2gn5d7ys9g7cxlck57vfddpv6ix890v21451";
+    };
+    patchPhase = ''
+      sed -i 's#COMMAND = "pass"#COMMAND = "${super.pass}/bin/pass"#' src/passff.py
+    '';
+    preBuild = null;
+    postBuild = null;
+  });
+
   # new packages
 
   myEmacs = super.emacsWithPackages(epkgs: [

@@ -1,7 +1,7 @@
 {
   "name": "passff",
   "description": "Host for communicating with zx2c4 pass",
-  "path": "/nix/store/ag4k3p9g7kirwn4ib27l4jbmdv6afx5l-passff-host-1.0.2/share/passff-host/passff.py",
+  "path": "/nix/store/0i2xp1sabvr566hj19ifzwjd4a71yfl5-passff-host-1.2.1/share/passff-host/passff.py",
   "type": "stdio",
   "allowed_extensions": [ "passff@invicem.pro" ]
 }
