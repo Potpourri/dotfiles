@@ -239,6 +239,7 @@ Will work on both org-mode and any mode that accepts plain html."
         "sa" 'org-toggle-archive-tag
         "sA" 'org-archive-subtree
         "sb" 'org-tree-to-indirect-buffer
+        "sd" 'org-cut-subtree
         "sh" 'org-promote-subtree
         "sj" 'org-move-subtree-down
         "sk" 'org-move-subtree-up
@@ -566,7 +567,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
         "Bac" 'org-brain-add-child
         "Bv" 'org-brain-visualize
         "Bap" 'org-brain-add-parent
-        "Baf" 'org-brain-add-fiendship
+        "Baf" 'org-brain-add-friendship
         "Bgc" 'org-brain-goto-child
         "Bgp" 'org-brain-goto-parent
         "Bgf" 'org-brain-goto-friend

@@ -1,6 +1,6 @@
 #+TITLE: Spacemacs documentation
 
-* Table of Contents                     :TOC_4_gh:noexport:
+* Table of Contents                     :TOC_5_gh:noexport:
 - [[#core-pillars][Core Pillars]]
   - [[#mnemonic][Mnemonic]]
   - [[#discoverable][Discoverable]]
@@ -87,8 +87,10 @@
     - [[#all-the-icons-theme][All-the-Icons theme]]
     - [[#custom-spaceline-theme][Custom spaceline theme]]
     - [[#minor-modes][Minor Modes]]
-  - [[#frame-title][Frame title]]
-    - [[#iconified-tabified-title][Iconified (tabified) title]]
+  - [[#frame][Frame]]
+    - [[#title][Title]]
+      - [[#iconified-tabified-title][Iconified (tabified) title]]
+    - [[#transparency][Transparency]]
 - [[#layouts-and-workspaces][Layouts and workspaces]]
   - [[#layouts][Layouts]]
     - [[#the-default-layout][The default layout]]
@@ -167,7 +169,7 @@
     - [[#smartparens-strict-mode][Smartparens Strict mode]]
     - [[#zooming][Zooming]]
       - [[#text][Text]]
-      - [[#frame][Frame]]
+      - [[#frame-1][Frame]]
     - [[#increasedecrease-numbers][Increase/Decrease numbers]]
     - [[#spell-checking][Spell checking]]
     - [[#region-selection][Region selection]]
@@ -176,6 +178,9 @@
     - [[#region-narrowing][Region narrowing]]
     - [[#replacing-text-with-iedit][Replacing text with iedit]]
       - [[#iedit-states-key-bindings][iedit states key bindings]]
+        - [[#state-transitions][State transitions]]
+        - [[#in-iedit-state][In iedit state]]
+        - [[#in-iedit-insert-state][In iedit-insert state]]
       - [[#examples][Examples]]
     - [[#replacing-text-in-several-files][Replacing text in several files]]
     - [[#renaming-files-in-a-directory][Renaming files in a directory]]
@@ -184,6 +189,8 @@
     - [[#deleting-files][Deleting files]]
     - [[#editing-lisp-code][Editing Lisp code]]
       - [[#lisp-key-bindings][Lisp Key bindings]]
+        - [[#lisp-state-key-bindings][Lisp state key bindings]]
+        - [[#emacs-lisp-specific-key-bindings][Emacs lisp specific key bindings]]
     - [[#mouse-usage][Mouse usage]]
   - [[#managing-projects][Managing projects]]
   - [[#registers][Registers]]
@@ -1565,7 +1572,8 @@ squared symbols like =🅿=.
 | ~SPC t C-W~ | =Ⓦ=     | W     | automatic whitespace cleanup globally                                |
 | ~SPC t y~   | =ⓨ=     | y     | [[https://github.com/capitaomorte/yasnippet][yasnippet]] mode                                                       |
 
-** Frame title
+** Frame
+*** Title
 Default frame title displays name of current process and hostname of system. You
 can include more information (like name of current file, name of current project
 etc) by setting =dotspacemacs-frame-title-format= variable.
@@ -1590,13 +1598,27 @@ Following format short codes are available:
 | =%z= | mnemonics of buffer, terminal, and keyboard coding systems                   |
 | =%Z= | like %z, but including the end-of-line format“                               |
 
-*** Iconified (tabified) title
+**** Iconified (tabified) title
 If you are using tiling window manager with tab support you may want to display
 different title for inactive tabs with =dotspacemacs-icon-title-format=
 variable. Short codes are same as for frame title.
 
 If this variable is set to =nil= (default) its value will be same as
 =dotspacemacs-frame-title-format=.
+
+*** Transparency
+The Frame transparency can be toggled with: ~SPC T T~
+
+This also opens the Frame Transparency Transient State.
+
+In the transient state:
+
+| Key binding   | Description                    |
+|---------------+--------------------------------|
+| ~+~, ~=~, ~k~ | increase transparency          |
+| ~-~, ~j~      | decrease transparency          |
+| ~T~           | toggle transparency on and off |
+| ~q~           | quit transient state           |
 
 * Layouts and workspaces
 Layouts are window configurations with buffer isolation. Each layout can define
@@ -2628,7 +2650,7 @@ file with =ag=.
 - It is also possible to search in several directories at once by marking
   them in the Helm buffer (not available in Ivy).
 
-*Beware* if you use =pt=, [[https://core.tcl.tk/tcllib/doc/trunk/embedded/www/tcllib/files/apps/pt.html][TCL parser tools]] also install a command line tool
+*Beware* if you use =pt=, [[https://core.tcl.tk/tcllib/doc/tcllib-1-17/embedded/www/tcllib/files/apps/pt.html][TCL parser tools]] also install a command line tool
 called =pt=.
 
 **** Useful key bindings
@@ -2938,21 +2960,19 @@ It is possible to enable it easily for /all programming modes/ with the variable
 **** Text
 The font size of the current buffer can be adjusted with the commands:
 
-| Key binding | Description                                                                    |
-|-------------+--------------------------------------------------------------------------------|
-| ~SPC z x +~ | scale up the font and initiate the font scaling transient state                |
-| ~SPC z x =~ | scale up the font and initiate the font scaling transient state                |
-| ~SPC z x -~ | scale down the font and initiate the font scaling transient state              |
-| ~SPC z x 0~ | reset the font size (no scaling) and initiate the font scaling transient state |
+| Key binding                           | Description                                                                    |
+|---------------------------------------+--------------------------------------------------------------------------------|
+| ~SPC z x +~, ~SPC z x =~, ~SPC z x k~ | scale up the font and initiate the font scaling transient state                |
+| ~SPC z x -~, ~SPC z x j~              | scale down the font and initiate the font scaling transient state              |
+| ~SPC z x 0~                           | reset the font size (no scaling) and initiate the font scaling transient state |
 
 In the transient state:
 
-| Key binding | Description            |
-|-------------+------------------------|
-| ~+~         | increase the font size |
-| ~=~         | increase the font size |
-| ~-~         | decrease the font size |
-| ~0~         | reset the font size    |
+| Key binding   | Description            |
+|---------------+------------------------|
+| ~+~, ~=~, ~k~ | increase the font size |
+| ~-~, ~j~      | decrease the font size |
+| ~0~           | reset the font size    |
 
 Note that /only/ the text of the current buffer is scaled, the other buffers,
 the mode-line and the minibuffer are not affected. To zoom the whole content of
@@ -2961,16 +2981,19 @@ a frame use the =zoom frame= bindings (see next section).
 **** Frame
 You can zoom in and out the whole content of the frame with the commands:
 
-| Key binding | Description                                                                 |
-|-------------+-----------------------------------------------------------------------------|
-| ~SPC z f +~ | zoom in the frame content and initiate the frame scaling transient state    |
-| ~SPC z f =~ | zoom in the frame content and initiate the frame scaling transient state    |
-| ~SPC z f -~ | zoom out the frame content and initiate the frame scaling transient state   |
-| ~SPC z f 0~ | reset the frame content size and initiate the frame scaling transient state |
-| ~+~         | zoom in                                                                     |
-| ~=~         | zoom in                                                                     |
-| ~-~         | zoom out                                                                    |
-| ~0~         | reset zoom                                                                  |
+| Key binding                           | Description                                                                 |
+|---------------------------------------+-----------------------------------------------------------------------------|
+| ~SPC z f +~, ~SPC z f =~, ~SPC z f k~ | zoom in the frame content and initiate the frame scaling transient state    |
+| ~SPC z f -~, ~SPC z f j~              | zoom out the frame content and initiate the frame scaling transient state   |
+| ~SPC z f 0~                           | reset the frame content size and initiate the frame scaling transient state |
+
+In the transient state:
+
+| Key binding   | Description      |
+|---------------+------------------|
+| ~+~, ~=~, ~k~ | zoom frame in    |
+| ~-~, ~j~      | zoom frame out   |
+| ~0~           | reset frame zoom |
 
 *** Increase/Decrease numbers
 Spacemacs uses [[https://github.com/cofi/evil-numbers][evil-numbers]] to easily increase or decrease numbers.
