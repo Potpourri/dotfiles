@@ -76,21 +76,6 @@ in
     };
   });
 
-  pass = super.pass // {
-    withExtensions = exts: (super.pass.withExtensions exts).overrideAttrs(oldA: {
-      preFixup = ''
-        for f in ${lib.last oldA.buildInputs}/share/bash-completion/completions/*; do
-          ln -s $f $out/share/bash-completion/completions/
-        done
-      '';
-    });
-  };
-
-  passExtensions = super.passExtensions // {
-    pass-audit = callPackage ../pkgs/pass/audit.nix { };
-    pass-update = callPackage ../pkgs/pass/update.nix { };
-  };
-
   #WORKAROUND: https://github.com/NixOS/nixpkgs/pull/61735
   passff-host = super.passff-host.overrideAttrs(oldA: rec {
     name = "passff-host-${version}";
@@ -102,7 +87,8 @@ in
       sha256 = "0ydfwvhgnw5c3ydx2gn5d7ys9g7cxlck57vfddpv6ix890v21451";
     };
     patchPhase = ''
-      sed -i 's#COMMAND = "pass"#COMMAND = "${super.pass}/bin/pass"#' src/passff.py
+      sed -i 's#COMMAND = "pass"#COMMAND = "${self.myPass}/bin/pass"#' src/passff.py
+      substituteInPlace src/passff.py --replace '"PATH"' '#"PATH"'
     '';
     preBuild = null;
     postBuild = null;
@@ -122,6 +108,22 @@ in
     ieee754
     text
   ]));
+
+  #WORKAROUND: expose bash completions for pass extensions
+  passWithExtensions = exts: (super.pass.withExtensions exts).overrideAttrs(oldA: let
+    extensionsEnv = lib.last oldA.buildInputs;
+  in {
+    preFixup = ''
+      for f in ${extensionsEnv}/share/bash-completion/completions/*; do
+        ln -s $f $out/share/bash-completion/completions/
+      done
+    '';
+  });
+
+  myPass = self.passWithExtensions (_: [
+    (callPackage ../pkgs/pass/audit.nix { })
+    (callPackage ../pkgs/pass/update.nix { })
+  ]);
 
   marcfs = callPackage ../pkgs/marcfs { };
 

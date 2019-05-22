@@ -105,10 +105,7 @@ in
     lsof
     direnv
     # pass:
-    (pass.withExtensions (_: with passExtensions; [
-      pass-update
-      pass-audit
-    ]))
+    myPass
     passff-host
     # archivers:
     libarchive
