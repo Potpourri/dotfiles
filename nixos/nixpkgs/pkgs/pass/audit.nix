@@ -10,8 +10,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-audit";
-    rev = "v${version}";
-    sha256 = "1mdckw0dwcnv8smp1za96y0zmdnykbkw2606v7mzfnzbz4zjdlwl";
+    rev = "4d285fada719b84e2ffeb03797c1f67c6f29633e";
+    sha256 = "1b1nh45ayyl3pymz75naim0wwzb5nf8x6b9c5w71j2c771zgxc05";
   };
 
   nativeBuildInputs = [ makeWrapper ];
