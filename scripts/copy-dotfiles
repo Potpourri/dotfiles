@@ -28,8 +28,6 @@ main() {
 
 	# VirtualBox
 	copy ~/.config/VirtualBox/VirtualBox.xml                                   "$dotfiles_root"/virtualbox/VirtualBox.xml
-	# passff-host
-	copy "$(nix path-info nixpkgs.passff-host)"/share/passff-host/passff.json  "$dotfiles_root"/firefox/passff.json
 }
 
 main

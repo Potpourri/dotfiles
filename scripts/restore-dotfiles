@@ -49,6 +49,10 @@ copy() {
 	success "Copied: ${from#"$USER_HOME/Projects/"} → ${to/#"$USER_HOME"/\~}"
 }
 
+nix_install() {
+	sudo -u "$USER_NAME" nix-env -iA nixos.passff-host
+}
+
 main() {
 	local dotfiles_root
 	if (( "$EUID" != 0 )); then
@@ -56,40 +60,43 @@ main() {
 	fi
 	dotfiles_root="$( dirname "$( dirname "$( realpath "${BASH_SOURCE[0]}" )" )" )"
 
+	# install user-level packages
+	nix_install
+
 	# NixOS
-	link "$dotfiles_root"/nixos/configuration.nix               /etc/nixos/configuration.nix
-	link "$dotfiles_root"/nixos/nix-channels                    "$USER_HOME"/.nix-channels
-	link "$dotfiles_root"/nixos/nixpkgs/                        "$USER_HOME"/.config/nixpkgs
+	link "$dotfiles_root"/nixos/configuration.nix                 /etc/nixos/configuration.nix
+	link "$dotfiles_root"/nixos/nix-channels                      "$USER_HOME"/.nix-channels
+	link "$dotfiles_root"/nixos/nixpkgs/                          "$USER_HOME"/.config/nixpkgs
 	# Spacemacs
-	link "$dotfiles_root"/spacemacs/spacemacs                   "$USER_HOME"/.spacemacs
-	link "$dotfiles_root"/spacemacs/emacs.d/                    "$USER_HOME"/.emacs.d
+	link "$dotfiles_root"/spacemacs/spacemacs                     "$USER_HOME"/.spacemacs
+	link "$dotfiles_root"/spacemacs/emacs.d/                      "$USER_HOME"/.emacs.d
 	# XDG
-	link "$dotfiles_root"/xdg/user-dirs.dirs                    "$USER_HOME"/.config/user-dirs.dirs
-	link "$dotfiles_root"/xdg/mimeapps.list                     "$USER_HOME"/.config/mimeapps.list
-	link "$dotfiles_root"/xdg/applications/emacsclient.desktop  "$USER_HOME"/.local/share/applications/emacsclient.desktop
+	link "$dotfiles_root"/xdg/user-dirs.dirs                      "$USER_HOME"/.config/user-dirs.dirs
+	link "$dotfiles_root"/xdg/mimeapps.list                       "$USER_HOME"/.config/mimeapps.list
+	link "$dotfiles_root"/xdg/applications/emacsclient.desktop    "$USER_HOME"/.local/share/applications/emacsclient.desktop
 	# GTK
-	link "$dotfiles_root"/gtk/gtkrc-2.0                         "$USER_HOME"/.gtkrc-2.0
-	link "$dotfiles_root"/gtk/gtk-3.0-settings.ini              "$USER_HOME"/.config/gtk-3.0/settings.ini
+	link "$dotfiles_root"/gtk/gtkrc-2.0                           "$USER_HOME"/.gtkrc-2.0
+	link "$dotfiles_root"/gtk/gtk-3.0-settings.ini                "$USER_HOME"/.config/gtk-3.0/settings.ini
 	# GnuPG
-	link "$dotfiles_root"/gnupg/gpg-agent.conf                  "$USER_HOME"/.gnupg/gpg-agent.conf
-	link "$dotfiles_root"/gnupg/sshcontrol                      "$USER_HOME"/.gnupg/sshcontrol
+	link "$dotfiles_root"/gnupg/gpg-agent.conf                    "$USER_HOME"/.gnupg/gpg-agent.conf
+	link "$dotfiles_root"/gnupg/sshcontrol                        "$USER_HOME"/.gnupg/sshcontrol
 	# Git
-	link "$dotfiles_root"/git/gitconfig                         "$USER_HOME"/.gitconfig
+	link "$dotfiles_root"/git/gitconfig                           "$USER_HOME"/.gitconfig
 	# git-annex
-	link "$dotfiles_root"/git-annex/autostart                   "$USER_HOME"/.config/git-annex/autostart
+	link "$dotfiles_root"/git-annex/autostart                     "$USER_HOME"/.config/git-annex/autostart
 	# Udiskie
-	link "$dotfiles_root"/udiskie/config.yml                    "$USER_HOME"/.config/udiskie/config.yml
+	link "$dotfiles_root"/udiskie/config.yml                      "$USER_HOME"/.config/udiskie/config.yml
 	# CUPS
-	copy "$dotfiles_root"/cups/printers.conf                    /etc/cups/printers.conf
+	copy "$dotfiles_root"/cups/printers.conf                      /etc/cups/printers.conf
 	# ALSA
-	copy "$dotfiles_root"/alsa/asound.state                     /var/lib/alsa/asound.state
+	copy "$dotfiles_root"/alsa/asound.state                       /var/lib/alsa/asound.state
 	# Firefox
-	link "$dotfiles_root"/firefox/userContent.css               "$USER_HOME"/.mozilla/firefox/"$FX_PROFILE"/chrome/userContent.css
-	link "$dotfiles_root"/firefox/passff.json                   "$USER_HOME"/.mozilla/native-messaging-hosts/passff.json
+	link "$dotfiles_root"/firefox/userContent.css                 "$USER_HOME"/.mozilla/firefox/"$FX_PROFILE"/chrome/userContent.css
+	link "$USER_HOME"/.nix-profile/share/passff-host/passff.json  "$USER_HOME"/.mozilla/native-messaging-hosts/passff.json
 	# RetroArch
-	link "$dotfiles_root"/retroarch/retroarch.cfg               "$USER_HOME"/.config/retroarch/retroarch.cfg
+	link "$dotfiles_root"/retroarch/retroarch.cfg                 "$USER_HOME"/.config/retroarch/retroarch.cfg
 	# VirtualBox
-	copy "$dotfiles_root"/virtualbox/VirtualBox.xml             "$USER_HOME"/.config/VirtualBox/VirtualBox.xml
+	copy "$dotfiles_root"/virtualbox/VirtualBox.xml               "$USER_HOME"/.config/VirtualBox/VirtualBox.xml
 }
 
 main

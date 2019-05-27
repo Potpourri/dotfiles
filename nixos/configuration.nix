@@ -104,9 +104,7 @@ in
     gitAndTools.git-annex
     lsof
     direnv
-    # pass:
     myPass
-    passff-host
     # archivers:
     libarchive
     p7zip
