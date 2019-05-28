@@ -80,6 +80,7 @@ main() {
 	# GnuPG
 	link "$dotfiles_root"/gnupg/gpg-agent.conf                    "$USER_HOME"/.gnupg/gpg-agent.conf
 	link "$dotfiles_root"/gnupg/sshcontrol                        "$USER_HOME"/.gnupg/sshcontrol
+	link "$dotfiles_root"/gnupg/gpg.conf                          "$USER_HOME"/.gnupg/gpg.conf
 	# Git
 	link "$dotfiles_root"/git/gitconfig                           "$USER_HOME"/.gitconfig
 	# git-annex
