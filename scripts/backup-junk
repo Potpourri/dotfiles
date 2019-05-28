@@ -13,18 +13,26 @@ info() {
 }
 
 main() {
+	local include_vms=false
 	if (( "$EUID" == 0 )); then
 		error "This script must be run as regular user (non-root)"
 	fi
+	(( "$#" >= 1 )) && [[ "$1" == "--vms" ]] && include_vms=true
 	cd
 
 	info "Creating ~/backup-junk/"
 	mkdir backup-junk
 	mkdir backup-junk/eclipse
 	# Eclipse Nix environment
-	cp -v                    ~/Projects/eclipse/default.nix  backup-junk/eclipse/default.nix
+	cp -v  ~/Projects/eclipse/default.nix  backup-junk/eclipse/default.nix
 	# VirtualBox VMs (winxp32sp3, ...)
-	cp -vr --reflink=always  ~/"VirtualBox VMs"/             backup-junk/"VirtualBox VMs"
+	if [[ "$include_vms" == true ]]; then
+		cp -vr --reflink=always  ~/"VirtualBox VMs"  backup-junk/"VirtualBox VMs"
+	fi
+	# secrets
+	git clone         ~/Projects/dotfiles/secrets  backup-junk/secrets
+	gpgtar --encrypt  backup-junk/secrets        > backup-junk/secrets.tar.gpg
+	rm -rf                                         backup-junk/secrets
 
 	info "Mounting mailrucloud"
 	marcfs /cloud/mailrucloud
@@ -43,4 +51,4 @@ main() {
 	rm -rf backup-junk/
 }
 
-main
+main "$@"
