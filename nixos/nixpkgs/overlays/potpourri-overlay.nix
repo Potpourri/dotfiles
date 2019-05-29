@@ -98,13 +98,19 @@ in
 
   myEmacs = super.emacsWithPackages(epkgs: [
     epkgs.pdf-tools
-    super.djvulibre
-    super.python3
     super.editorconfig-core-c
     self.ats2-nightly
+    # Djvu viewer:
+    super.djvulibre
+    super.python3
+    # Image-Dired:
+    super.imagemagick
+    super.exiftool
+    super.libjpeg
   ]);
 
   myGHC = super.haskellPackages.ghcWithPackages(hpkgs: (with hpkgs; [
+    # for Agda:
     ieee754
     text
   ]));
