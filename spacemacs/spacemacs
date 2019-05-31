@@ -69,9 +69,10 @@ This function should only modify configuration layer settings."
    '(
      pinentry
      direnv
+     ;; syntax
      (bazel-mode :location (recipe :fetcher github :repo "bazelbuild/emacs-bazel-mode"))
-     (ats2-mode :location "~/Projects/third_party/ats2-mode")
-     (flycheck-ats2 :location "~/Projects/third_party/flycheck-ats2")
+     (ats2-mode :location (recipe :fetcher github :repo "Potpourri/ats2-mode"))
+     (flycheck-ats2 :location (recipe :fetcher github :repo "Potpourri/flycheck-ats2"))
      )
 
    ;; A list of packages that cannot be updated.
