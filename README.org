@@ -19,5 +19,5 @@ My setup: [[https://nixos.org][NixOS]] + [[https://github.com/timor/spacemacsOS]
 
 [[./LICENSE][MIT]]
 
-Except =spacemacs/emacs.d=, which contains clone of Spacemacs and SpacemacsOS layer,
+Except =spacemacs/emacs.d=, which contains clone of Spacemacs, SpacemacsOS layer and Media layer,
 their [[./spacemacs/emacs.d/README.md#license][license GPLv3]].

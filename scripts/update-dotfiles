@@ -50,6 +50,10 @@ main() {
 	git-wrapper subtree pull --squash --prefix spacemacs/emacs.d/private/local/exwm spacemacs-os master \
 		-m "Merge 'spacemacs/emacs.d/private/local/exwm' subtree"
 
+	info "Updating 'spacemacs/emacs.d/private/local/media' subtree"
+	git-wrapper subtree pull --squash --prefix spacemacs/emacs.d/private/local/media spacemacs-emms master \
+		-m "Merge 'spacemacs/emacs.d/private/local/media' subtree"
+
 	success "All subtree\submodules updated"
 }
 

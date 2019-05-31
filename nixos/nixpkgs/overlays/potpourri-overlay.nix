@@ -96,9 +96,34 @@ in
 
   # new packages
 
+  #WORKAROUND: compile emms-print-metadata
+  emacs-emms = super.emacsPackagesNg.melpaBuild rec {
+    pname = "emms";
+    version = "5.2";
+    src = super.fetchgit {
+      url = https://git.savannah.gnu.org/git/emms.git;
+      rev = version;
+      sha256 = "0r0ai788mn5f3kf5wrp6jywncl2z3gpjif41pm5m0892y7l0vh9i";
+    };
+    buildInputs = [ super.taglib ];
+    preBuild = ''
+      make emms-print-metadata
+      install -m 755 -D src/emms-print-metadata $out/bin/emms-print-metadata
+    '';
+    recipe = super.writeText "recipe" ''
+      (emms
+       :url "https://git.savannah.gnu.org/git/emms.git"
+       :fetcher git
+       :files ("lisp/*.el" "doc/emms.texinfo"))
+    '';
+    packageRequires = [ super.mpg321 ];
+  };
+
   myEmacs = super.emacsWithPackages(epkgs: [
     epkgs.pdf-tools
     super.editorconfig-core-c
+    self.emacs-emms
+    # Flycheck:
     self.ats2-nightly
     # Djvu viewer:
     super.djvulibre
