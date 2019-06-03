@@ -307,7 +307,12 @@ in
     };
   };
 
-  networking.firewall.enable = true;
+  networking.firewall = {
+    enable = true;
+    # open Transmission's port
+    allowedTCPPorts = [ 51413 ];
+    allowedUDPPorts = [ 51413 ];
+  };
 
   programs.gnupg.agent = {
     enable = true;
