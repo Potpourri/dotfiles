@@ -31,6 +31,11 @@ in
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = [
+      "CONFIG_SND_DEBUG=y"
+      "CONFIG_SND_HDA_PATCH_LOADER=y"
+    ];
+    extraModprobeConfig = "options snd_hda_intel patch=gigabyte-realtek-alc883.fw";
     cleanTmpDir = true;
     loader = {
       timeout = 1;
@@ -43,6 +48,29 @@ in
       };
     };
   };
+
+  # Support Realtek ALC883 in ALSA is sucks, we just fix what's possible
+  hardware.firmware = lib.singleton (pkgs.runCommand "hda-jack-retask" {} ''
+    mkdir -p $out/lib/firmware
+    cat <<- EOF > $out/lib/firmware/gigabyte-realtek-alc883.fw
+    	[codec]
+    	0x10ec0883 0x1458c603 2
+
+    	[pincfg]
+    	0x14 0x01014410
+    	0x15 0x411111f0
+    	0x16 0x411111f0
+    	0x17 0x411111f0
+    	0x18 0x01014010
+    	0x19 0x40f000f0
+    	0x1a 0x01014010
+    	0x1b 0x90170150
+    	0x1c 0x993301f0
+    	0x1d 0x411111f0
+    	0x1e 0x40f000f0
+    	0x1f 0x40f000f0
+    EOF
+  '');
 
   ##################################################################################################
   # Internationalisation and date/time
