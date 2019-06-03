@@ -324,6 +324,7 @@ in
     settings = {
       download-dir = config.users.users.john.home + "/Downloads/torrents";
       incomplete-dir-enabled = true;
+      lpd-enabled = true;
     };
   };
 
