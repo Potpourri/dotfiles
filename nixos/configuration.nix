@@ -316,7 +316,10 @@ in
 
   services.transmission = {
     enable = true;
-    settings.incomplete-dir-enabled = true;
+    settings = {
+      download-dir = config.users.users.john.home + "/Downloads/torrents";
+      incomplete-dir-enabled = true;
+    };
   };
 
   programs.adb.enable = true;
