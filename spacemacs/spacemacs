@@ -471,30 +471,48 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ;; default text editing settings
   (setq-default tab-width 2)
-  (setq-default fill-column 100)
-  (setq-default fci-rule-color "#808080")
+  (setq fill-column 100)
 
-  ;; EMMS:
+  ;; EMMS
   (setq emms-source-file-default-directory "~/Music")
 
+  ;;WORKAROUND: https://github.com/syl20bnr/spacemacs/issues/11073
   (setq flycheck-global-modes t)
+
+  ;; Fill Column Indicator
+  (setq fci-rule-color "#808080")
   (add-hook 'prog-mode-hook 'turn-on-fci-mode)
   (add-hook 'text-mode-hook 'turn-on-fci-mode)
+
+  ;; disable hyperlinks in below modes
   (add-hook 'makefile-mode-hook (lambda () (goto-address-mode -1)))
   (add-hook 'nix-mode-hook (lambda () (goto-address-mode -1)))
 
+  ;; set direnv variables to buffer
   (direnv-mode)
 
+  ;; ATS
   (use-package ats2-mode)
   (with-eval-after-load 'flycheck
     (use-package flycheck-ats2)
     (flycheck-ats2-setup))
 
+  ;; Bazel
   (add-to-list 'auto-mode-alist '("/BUILD\\(\\..*\\)?\\'" . bazel-mode))
   (add-to-list 'auto-mode-alist '("/WORKSPACE\\'" . bazel-mode))
   (add-to-list 'auto-mode-alist '("\\.\\(BUILD\\|WORKSPACE\\|bzl\\)\\'" . bazel-mode))
 
+  ;; Term
+  (defun potpourri/setup-term-mode ()
+    (evil-local-set-key 'insert (kbd "C-c C-r") 'potpourri/send-C-r))
+  (defun potpourri/send-C-r ()
+    (interactive)
+    (term-send-raw-string "\C-r"))
+  (add-hook 'term-mode-hook 'potpourri/setup-term-mode)
+
+  ;; Eshell
   (require 'em-tramp)
   (setq password-cache t)
   (setq password-cache-expiry 3600)
@@ -502,8 +520,10 @@ before packages are loaded."
     (delq 'eshell-banner eshell-modules-list)
     (push 'eshell-tramp eshell-modules-list))
 
+  ;; PDF-tools
   (setq pdf-misc-print-programm "/run/current-system/sw/bin/lpr")
 
+  ;; GnuPG
   (pinentry-start)
   (setenv "INSIDE_EMACS" "26.2")
   (setenv "GPG_TTY" "/dev/tty/7")
