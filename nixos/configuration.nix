@@ -312,6 +312,11 @@ in
     # open Transmission's port
     allowedTCPPorts = [ 51413 ];
     allowedUDPPorts = [ 51413 ];
+    # proxy Rutracker's bt* trackers
+    extraCommands = ''
+      iptables -t nat -I OUTPUT -p tcp -m tcp --dport 80 -d 195.82.146.120/30 -j DNAT \
+               --to-destination 163.172.167.207:3128
+    '';
   };
 
   programs.gnupg.agent = {
