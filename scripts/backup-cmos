@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+error() {
+	local msg="$1"
+	echo "$(tput setaf 1)ERROR:$(tput sgr0) $msg" >&2
+	exit 1
+}
+
+success() {
+	local msg="$1"
+	echo "$(tput setaf 2)SUCCESS:$(tput sgr0) $msg"
+}
+
+main() {
+	local dotfiles_root
+	if (( "$EUID" != 0 )); then
+		error "This script must be run as root"
+	fi
+	dotfiles_root="$( dirname "$( dirname "$( realpath "${BASH_SOURCE[0]}" )" )" )"
+
+	cat /dev/nvram > "$dotfiles_root/bios/cmos.bin"
+	success "CMOS stored in dotfiles/bios/cmos.bin"
+}
+
+main
