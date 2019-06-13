@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -o errexit -o nounset -o pipefail
 
+USER_NAME=john
+USER_HOME="$(eval echo "~$USER_NAME")"
+
 error() {
 	local msg="$1"
 	echo "$(tput setaf 1)ERROR:$(tput sgr0) $msg" >&2
@@ -15,19 +18,23 @@ success() {
 copy() {
 	local from="$1"
 	local to="$2"
-	install -m 644 -D "$from" "$to"
-	success "Copied: ${from/#"$HOME"/\~} → ${to#~/Projects/}"
+	install -o "$USER_NAME" -g users -m 644 -D "$from" "$to"
+	success "Copied: ${from/#"$USER_HOME"/\~} → ${to#"$USER_HOME"/Projects/}"
 }
 
 main() {
 	local dotfiles_root
-	if (( "$EUID" == 0 )); then
-		error "This script must be run as regular user (non-root)"
+	if (( "$EUID" != 0 )); then
+		error "This script must be run as root"
 	fi
 	dotfiles_root="$( dirname "$( dirname "$( realpath "${BASH_SOURCE[0]}" )" )" )"
 
 	# VirtualBox
-	copy ~/.config/VirtualBox/VirtualBox.xml                                   "$dotfiles_root"/virtualbox/VirtualBox.xml
+	copy "$USER_HOME"/.config/VirtualBox/VirtualBox.xml  "$dotfiles_root"/virtualbox/VirtualBox.xml
+	# ALSA
+	copy /var/lib/alsa/asound.state                      "$dotfiles_root"/alsa/asound.state
+	# CUPS
+	copy /etc/cups/printers.conf                         "$dotfiles_root"/cups/printers.conf
 }
 
 main
