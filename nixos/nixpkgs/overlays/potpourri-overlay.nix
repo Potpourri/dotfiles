@@ -116,7 +116,10 @@ in
        :fetcher git
        :files ("lisp/*.el" "doc/emms.texinfo"))
     '';
-    packageRequires = [ super.mpg321 ];
+    packageRequires = [
+      super.mpg321
+      super.mpv
+    ];
   };
 
   myEmacs = super.emacsWithPackages(epkgs: [

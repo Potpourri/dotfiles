@@ -91,6 +91,8 @@ main() {
 	copy "$dotfiles_root"/cups/printers.conf                      /etc/cups/printers.conf
 	# ALSA
 	copy "$dotfiles_root"/alsa/asound.state                       /var/lib/alsa/asound.state
+	# mpv
+	link "$dotfiles_root"/mpv/mpv.conf                            "$USER_HOME"/.config/mpv/mpv.conf
 	# Firefox
 	link "$dotfiles_root"/firefox/userContent.css                 "$USER_HOME"/.mozilla/firefox/"$FX_PROFILE"/chrome/userContent.css
 	link "$USER_HOME"/.nix-profile/share/passff-host/passff.json  "$USER_HOME"/.mozilla/native-messaging-hosts/passff.json
