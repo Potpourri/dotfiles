@@ -89,7 +89,7 @@ Only modes that don't derive from `prog-mode' should be listed here."
 (defcustom spacemacs-large-file-modes-list
   '(archive-mode tar-mode jka-compr git-commit-mode image-mode
                  doc-view-mode doc-view-mode-maybe ebrowse-tree-mode
-                 pdf-view-mode)
+                 pdf-view-mode fundamental-mode)
   "Major modes which `spacemacs/check-large-file' will not be
 automatically applied to."
   :group 'spacemacs
@@ -583,21 +583,27 @@ variable as a fallback to display the directory, useful in buffers like the
 ones created by `magit' and `dired'."
   (interactive)
   (if-let (directory-path (spacemacs--directory-path))
-      (message "%s" (kill-new directory-path))
+      (progn
+        (kill-new directory-path)
+        (message "%s" directory-path))
     (message "WARNING: Current buffer does not have a directory!")))
 
 (defun spacemacs/copy-file-path ()
   "Copy and show the file path of the current buffer."
   (interactive)
   (if-let (file-path (spacemacs--file-path))
-      (message "%s" (kill-new file-path))
+      (progn
+        (kill-new file-path)
+        (message "%s" file-path))
     (message "WARNING: Current buffer is not attached to a file!")))
 
 (defun spacemacs/copy-file-name ()
   "Copy and show the file name of the current buffer."
   (interactive)
   (if-let (file-name (file-name-nondirectory (spacemacs--file-path)))
-      (message "%s" (kill-new file-name))
+      (progn
+        (kill-new file-name)
+        (message "%s" file-name))
     (message "WARNING: Current buffer is not attached to a file!")))
 
 (defun spacemacs/copy-file-name-base ()
@@ -605,14 +611,18 @@ ones created by `magit' and `dired'."
 buffer."
   (interactive)
   (if-let (file-name (file-name-base (spacemacs--file-path)))
-      (message "%s" (kill-new file-name))
+      (progn
+        (kill-new file-name)
+        (message "%s" file-name))
     (message "WARNING: Current buffer is not attached to a file!")))
 
 (defun spacemacs/copy-file-path-with-line ()
   "Copy and show the file path of the current buffer, including line number."
   (interactive)
   (if-let (file-path (spacemacs--file-path-with-line))
-      (message "%s" (kill-new file-path))
+      (progn
+        (kill-new file-path)
+        (message "%s" file-path))
     (message "WARNING: Current buffer is not attached to a file!")))
 
 (defun spacemacs/copy-file-path-with-line-column ()
@@ -622,7 +632,9 @@ This function respects the value of the `column-number-indicator-zero-based'
 variable."
   (interactive)
   (if-let (file-path (spacemacs--file-path-with-line-column))
-      (message "%s" (kill-new file-path))
+      (progn
+        (kill-new file-path)
+        (message "%s" file-path))
     (message "WARNING: Current buffer is not attached to a file!")))
 
 
@@ -647,9 +659,10 @@ variable."
 
 (defun spacemacs/new-empty-buffer (&optional split)
   "Create a new buffer called untitled(<n>).
-A SPLIT argument with the value: `left',
-`below', `above' or `right', opens the new
-buffer in a split window."
+A SPLIT argument with the value: `left', `below', `above' or `right',
+opens the new buffer in a split window.
+If the variable `dotspacemacs-new-empty-buffer-major-mode' has been set,
+then apply that major mode to the new buffer."
   (interactive)
   (let ((newbuf (generate-new-buffer "untitled")))
     (case split
@@ -660,7 +673,9 @@ buffer in a split window."
       ('frame (select-frame (make-frame))))
     ;; Prompt to save on `save-some-buffers' with positive PRED
     (with-current-buffer newbuf
-      (setq-local buffer-offer-save t))
+      (setq-local buffer-offer-save t)
+      (when dotspacemacs-new-empty-buffer-major-mode
+        (funcall dotspacemacs-new-empty-buffer-major-mode)))
     ;; pass non-nil force-same-window to prevent `switch-to-buffer' from
     ;; displaying buffer in another window
     (switch-to-buffer newbuf nil 'force-same-window)))
