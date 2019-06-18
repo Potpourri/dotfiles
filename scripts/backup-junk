@@ -12,6 +12,30 @@ info() {
 	echo "$(tput setaf 4)INFO:$(tput sgr0) $msg"
 }
 
+sync() {
+	local cloud="$1"
+	local include_vms="$2"
+	if [[ "$cloud" == mailrucloud ]]; then
+		info "Mounting mailrucloud"
+		marcfs /cloud/mailrucloud
+		info "Syncing mailrucloud"
+		rsync -av --delete --size-only backup-junk /cloud/mailrucloud
+		if [[ "$include_vms" == true ]]; then
+			info "Syncing mailrucloud: VirtualBox VMs"
+			rsync -av --delete --size-only ~/"VirtualBox VMs" /cloud/mailrucloud
+		fi
+		info "Unmounting mailrucloud"
+		fusermount -u /cloud/mailrucloud
+	else
+		info "Mounting $cloud"
+		rclone sync --progress backup-junk "$cloud":/backup-junk
+		if [[ "$include_vms" == true ]]; then
+			info "Syncing $cloud: VirtualBox VMs"
+			rclone sync --progress ~/"VirtualBox VMs" "$cloud":/"VirtualBox VMs"
+		fi
+	fi
+}
+
 main() {
 	local include_vms=false
 	if (( "$EUID" == 0 )); then
@@ -25,29 +49,16 @@ main() {
 	mkdir backup-junk/eclipse
 	# Eclipse Nix environment
 	cp -v  ~/Projects/eclipse/default.nix  backup-junk/eclipse/default.nix
-	# VirtualBox VMs (winxp32sp3, ...)
-	if [[ "$include_vms" == true ]]; then
-		cp -vr --reflink=always  ~/"VirtualBox VMs"  backup-junk/"VirtualBox VMs"
-	fi
 	# secrets
 	git clone         ~/Projects/dotfiles/secrets  backup-junk/secrets
 	gpgtar --encrypt  backup-junk/secrets        > backup-junk/secrets.tar.gpg
 	rm -rf                                         backup-junk/secrets
 
-	info "Mounting mailrucloud"
-	marcfs /cloud/mailrucloud
+	sync mailrucloud "$include_vms"
+	sync yadisk "$include_vms"
+	sync gdrive "$include_vms"
+	sync meganz "$include_vms"
 
-	info "Syncing mailrucloud"
-	rsync -av --delete --size-only backup-junk /cloud/mailrucloud
-	info "Syncing yadisk"
-	rclone sync backup-junk yadisk:/backup-junk
-	info "Syncing gdrive"
-	rclone sync backup-junk gdrive:/backup-junk
-	info "Syncing meganz"
-	rclone sync backup-junk meganz:/backup-junk
-
-	info "Unmounting mailrucloud"
-	fusermount -u /cloud/mailrucloud
 	rm -rf backup-junk/
 }
 
