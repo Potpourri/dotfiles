@@ -83,9 +83,9 @@ Or set this variable when loading the configuration layer:
 
 ** Enabling sayid or clj-refactor
 The packages sayid (Clojure debugger) and clj-refactor (automatic refactorings)
-are disabled by default. To enable them, add a `:variables` option when enabling
-the `clojure` layer, specifying `clojure-enable-sayid`, or
-`clojure-enable-clj-refactor`, or both.
+are disabled by default. To enable them, add a =:variables= option when enabling
+the =clojure= layer, specifying =clojure-enable-sayid=, or
+=clojure-enable-clj-refactor=, or both.
 
 In your Spacemacs configuration:
 
@@ -114,7 +114,7 @@ function correctly extra nREPL middleware needs to be present
 (cider/cider-nrepl). The same is true for clj-refactor (refactor-nrepl), and for
 sayid (com.billpiel/sayid).
 
-When starting the Clojure process through cider (`cider-jack-in` and friends)
+When starting the Clojure process through cider (=cider-jack-in= and friends)
 this will be handled automatically, and so most users should be able to just run
 ~SPC m s i~ to connect to the CIDER REPL and skip the rest of this section.
 
@@ -168,8 +168,7 @@ are enabled.
       :dependencies [[nrepl "0.4.5"]]
 
       :repl-options
-      {:nrepl-middleware [cider.nrepl/cider-middleware
-                          refactor-nrepl.middleware/wrap-refactor ;; clj-refactor
+      {:nrepl-middleware [refactor-nrepl.middleware/wrap-refactor ;; clj-refactor
                           com.billpiel.sayid.nrepl-middleware/wrap-sayid ;; sayid
                           ]}}}
   #+END_SRC
@@ -225,7 +224,7 @@ When enabled the symbol =🆂= should be displayed in the mode-line.
 * Key bindings
 ** Working with clojure files (barfage, slurpage & more)
 Spacemacs comes with a special =lisp-state= for working with lisp code that
-supports slurpage, barfage and more tools you’ll likely want when working with
+supports slurpage, barfage and more tools you'll likely want when working with
 lisp.
 
 As this state works the same for all files, the documentation is in global
@@ -252,6 +251,7 @@ As this state works the same for all files, the documentation is in global
 | ~SPC m e b~ | eval buffer                                               |
 | ~SPC m e e~ | eval last sexp                                            |
 | ~SPC m e f~ | eval function at point                                    |
+| ~SPC m e i~ | interrupt the current evaluation                          |
 | ~SPC m e r~ | eval region                                               |
 | ~SPC m e m~ | cider macroexpand 1                                       |
 | ~SPC m e M~ | cider macroexpand all                                     |
@@ -331,7 +331,7 @@ As this state works the same for all files, the documentation is in global
 | ~SPC m d r~   | reload namespaces                                  |
 | ~SPC m d s~   | show what is currently traced                      |
 | ~SPC m d S~   | show what is currently traced in current namespace |
-| ~SPC m d t b~ | trace current file’s namespace                     |
+| ~SPC m d t b~ | trace current file's namespace                     |
 | ~SPC m d t d~ | disable existing trace on current function         |
 | ~SPC m d t D~ | disable existing trace on all functions            |
 | ~SPC m d t e~ | enable existing trace on current function          |
@@ -531,6 +531,6 @@ In general, ~q~ should always quit the popped up buffer.
 * Development Notes
 ** Indentation
 With a [[https://github.com/clojure-emacs/cider/blob/master/doc/indent_spec.md][new]] functionality of Cider to read the custom indentation rules from the
-var’s metadata, it is better for consistency reasons to not add the custom
+var's metadata, it is better for consistency reasons to not add the custom
 indentation rules to Spacemacs, but to add them to the metadata of those
 specific vars.

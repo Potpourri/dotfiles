@@ -23,6 +23,7 @@
                                        ("a"   "applications")
                                        ("A"   "other applications")
                                        ("b"   "buffers")
+                                       ("bc"  "indirect buffers")
                                        ("bN"  "new empty buffer")
                                        ("c"   "compile/comments")
                                        ("C"   "capture/colors")
@@ -132,6 +133,8 @@
     'universal-argument-more))
 ;; shell command  -------------------------------------------------------------
 (spacemacs/set-leader-keys "!" 'shell-command)
+;; last change  ---------------------------------------------------------------
+(spacemacs/set-leader-keys "," 'goto-last-change)
 ;; applications ---------------------------------------------------------------
 (spacemacs/set-leader-keys
   "ac"  'calc-dispatch
@@ -141,6 +144,9 @@
 ;; buffers --------------------------------------------------------------------
 (spacemacs/set-leader-keys
   "TAB"   'spacemacs/alternate-buffer
+  "b c n" 'make-indirect-buffer
+  "b c c" 'clone-indirect-buffer
+  "b c w" 'clone-indirect-buffer-other-window-without-purpose
   "bd"    'spacemacs/kill-this-buffer
   "be"    'spacemacs/safe-erase-buffer
   "bh"    'spacemacs/home
@@ -287,6 +293,7 @@
 ;; format ---------------------------------------------------------------------
 (spacemacs/set-leader-keys
   "jo" 'open-line
+  "jC" 'check-parens
   "j=" 'spacemacs/indent-region-or-buffer
   "jS" 'spacemacs/split-and-new-line
   "jk" 'spacemacs/evil-goto-next-line-and-indent)
@@ -395,7 +402,7 @@
 
 This is achieved by the built in functionality available in emacs 26 by changing
 the value of the `column-number-indicator-zero-based' variable. Functionality
-that does not take into acount `column-number-indicator-zero-based' will not
+that does not take into account `column-number-indicator-zero-based' will not
 respond to this toggle."
   :status (bound-and-true-p column-number-indicator-zero-based)
   :on (setq column-number-indicator-zero-based t)
