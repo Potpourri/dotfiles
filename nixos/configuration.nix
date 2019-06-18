@@ -97,6 +97,7 @@ in
       VISUAL = "emacsclient";
       EDITOR = VISUAL;
       PASSWORD_STORE_DIR = toString ../secrets;
+      RCLONE_CONFIG = toString ../secrets/rclone/rclone.conf;
     };
   };
 
