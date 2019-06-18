@@ -1,7 +1,7 @@
 { stdenv, pass, fetchFromGitHub, python3Packages, makeWrapper }:
 
 let
-  pythonEnv = python3Packages.python.withPackages (p: [ p.requests p.zxcvbn-python ]);
+  pythonEnv = python3Packages.python.withPackages (p: [ p.requests p.zxcvbn ]);
 
 in stdenv.mkDerivation rec {
   name = "pass-audit-${version}";
