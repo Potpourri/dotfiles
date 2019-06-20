@@ -538,6 +538,9 @@ before packages are loaded."
   (defun ls-trash ()
     (interactive)
     (shell-command-to-string "ls -lah ~/.local/share/Trash/files"))
+  (defun tree-trash ()
+    (interactive)
+    (shell-command-to-string "tree -a ~/.local/share/Trash/files"))
   (defun empty-trash ()
     (interactive)
     (call-process-shell-command "rm -rf ~/.local/share/Trash"))
@@ -550,6 +553,17 @@ before packages are loaded."
   (defun umount-usb ()
     (interactive)
     (shell-command "udiskie-umount --all"))
+  (let (muted)
+    (defun mute-speakers ()
+      (interactive)
+      (if muted
+        (call-process-shell-command "amixer -c Intel -q sset Surround 100% && \
+                                     amixer -c Intel -q sset Center 100% && \
+                                     amixer -c Intel -q sset LFE 100%")
+        (call-process-shell-command "amixer -c Intel -q sset Surround 0 && \
+                                     amixer -c Intel -q sset Center 0 && \
+                                     amixer -c Intel -q sset LFE 0"))
+      (setq muted (not muted))))
 
   (global-set-key (kbd "C-1") (lambda ()
                                 (interactive)
@@ -568,8 +582,11 @@ before packages are loaded."
                                 (sync2usb)
                                 (umount-usb)))
   (global-set-key (kbd "C-<f1>") (lambda ()
-                                (interactive)
-                                (call-process-shell-command "poweroff")))
+                                   (interactive)
+                                   (call-process-shell-command "poweroff")))
+  (global-set-key (kbd "<f8>") (lambda ()
+                                 (interactive)
+                                 (mute-speakers)))
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
