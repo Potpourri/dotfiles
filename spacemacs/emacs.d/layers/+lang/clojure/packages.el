@@ -62,6 +62,7 @@
                ("mh" . "documentation")
                ("mp" . "profile")
                ("ms" . "repl")
+               ("msj" . "jack-in")
                ("mt" . "test")
                ("mT" . "toggle")
                )))
@@ -89,6 +90,7 @@
             "eP" 'cider-pprint-eval-last-sexp
             "er" 'cider-eval-region
             "eu" 'cider-undef
+            "ev" 'cider-eval-sexp-at-point
             "ew" 'cider-eval-last-sexp-and-replace
 
             "="  'cider-format-buffer
@@ -96,14 +98,16 @@
 
             "gb" 'cider-pop-back
             "gc" 'cider-classpath
+            "gg" 'spacemacs/clj-find-var
             "ge" 'cider-jump-to-compilation-error
             "gn" 'cider-find-ns
             "gr" 'cider-find-resource
             "gs" 'cider-browse-spec
             "gS" 'cider-browse-spec-all
 
-            "'"  'cider-jack-in
-            "\"" 'cider-jack-in-clojurescript
+            "'"  'cider-jack-in-clj
+            "\"" 'cider-jack-in-cljs
+            "\&" 'cider-jack-in-clj&cljs
             "sb" 'cider-load-buffer
             "sB" 'spacemacs/cider-send-buffer-in-repl-and-focus
             "sc" (if (eq m 'cider-repl-mode)
@@ -114,8 +118,9 @@
             "sE" 'spacemacs/cider-send-last-sexp-to-repl-focus
             "sf" 'spacemacs/cider-send-function-to-repl
             "sF" 'spacemacs/cider-send-function-to-repl-focus
-            "si" 'cider-jack-in
-            "sI" 'cider-jack-in-clojurescript
+            "sjc" 'cider-jack-in-clj
+            "sjf" 'cider-jack-in-clj&cljs
+            "sjs" 'cider-jack-in-cljs
             "sn" 'spacemacs/cider-send-ns-form-to-repl
             "sN" 'spacemacs/cider-send-ns-form-to-repl-focus
             "so" 'cider-repl-switch-to-other
@@ -125,6 +130,7 @@
             "ss" (if (eq m 'cider-repl-mode)
                      'cider-switch-to-last-clojure-buffer
                    'cider-switch-to-repl-buffer)
+            "su" 'cider-repl-require-repl-utils
             "sx" 'cider-ns-refresh
             "sX" 'cider-restart
 
