@@ -142,6 +142,8 @@ in
     # clouds:
     rclone
     marcfs
+    # WARC:
+    warcat
   ];
 
   #WORKAROUND: fbterm requires root privileges

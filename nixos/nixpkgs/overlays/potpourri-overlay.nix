@@ -166,4 +166,6 @@ in
   padsc = callPackage ../pkgs/padsc { };
 
   ats2-nightly = callPackage ../pkgs/ats2-nightly { };
+
+  warcat = callPackage ../pkgs/warcat { };
 }
