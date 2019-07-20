@@ -170,4 +170,22 @@ in
   warcat = callPackage ../pkgs/warcat { };
 
   wpull = callPackage ../pkgs/wpull { };
+
+  #WORKAROUND: https://github.com/NixOS/nixpkgs/pull/52814
+  python3 = let
+    myOverride = {
+      packageOverrides = self: super: {
+        certauth = self.callPackage ../pkgs/python-modules/certauth { };
+        lupa = self.callPackage ../pkgs/python-modules/lupa { };
+        fakeredis = self.callPackage ../pkgs/python-modules/fakeredis { };
+        portalocker = self.callPackage ../pkgs/python-modules/portalocker { };
+        py3amf =self. callPackage ../pkgs/python-modules/py3amf { };
+        surt = self.callPackage ../pkgs/python-modules/surt { };
+        warcio = self.callPackage ../pkgs/python-modules/warcio { };
+        wsgiprox = self.callPackage ../pkgs/python-modules/wsgiprox { };
+      };
+    };
+  in
+    super.python3.override myOverride;
+  pywb = callPackage ../pkgs/pywb { };
 }

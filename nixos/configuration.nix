@@ -145,6 +145,7 @@ in
     # WARC:
     warcat
     wpull
+    pywb
   ];
 
   #WORKAROUND: fbterm requires root privileges
