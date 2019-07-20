@@ -144,6 +144,7 @@ in
     marcfs
     # WARC:
     warcat
+    wpull
   ];
 
   #WORKAROUND: fbterm requires root privileges
