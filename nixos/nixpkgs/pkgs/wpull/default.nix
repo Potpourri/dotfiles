@@ -1,8 +1,21 @@
 { fetchFromGitHub
-, python36Packages
+, python35Packages
 }:
 
-python36Packages.buildPythonPackage rec {
+let
+  html5lib_1_0b8 = python35Packages.html5lib.overridePythonAttrs(oldA: rec {
+    name = "${oldA.pname}-${version}";
+    version = "1.0b8";
+    src = oldA.src.override {
+      inherit version;
+      sha256 = "1lknq5j3nh11xrl268ks76zaj0gyzh34v94n5vbf6dk8llzxdx0q";
+    };
+    doCheck = false;
+  });
+
+in
+
+python35Packages.buildPythonPackage rec {
   pname = "wpull";
   version = "2.0.3";
 
@@ -17,10 +30,10 @@ python36Packages.buildPythonPackage rec {
     substituteInPlace setup.py --replace dnspython3 dnspython
   '';
 
-  propagatedBuildInputs = with python36Packages; [
+  propagatedBuildInputs = with python35Packages; [
     chardet
     dnspython
-    html5lib
+    html5lib_1_0b8
     namedlist
     sqlalchemy
     tornado_4

@@ -1,9 +1,9 @@
 { fetchFromGitHub
-, python3Packages
+, python36Packages
 , makeWrapper
 }:
 
-python3Packages.buildPythonPackage rec {
+python36Packages.buildPythonPackage rec {
   pname = "warcat";
   version = "2.2.5";
 
@@ -15,10 +15,10 @@ python3Packages.buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ python3Packages.isodate ];
+  propagatedBuildInputs = [ python36Packages.isodate ];
 
   postInstall = ''
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/warcat \
+    makeWrapper ${python36Packages.python.interpreter} $out/bin/warcat \
       --set PYTHONPATH "$PYTHONPATH:$out/share/warcat" \
       --add-flags "-m warcat"
   '';
