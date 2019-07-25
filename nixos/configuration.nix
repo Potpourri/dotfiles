@@ -34,6 +34,8 @@ in
     kernelParams = [
       "CONFIG_SND_DEBUG=y"
       "CONFIG_SND_HDA_PATCH_LOADER=y"
+      # disable Spectre and Meltdown patches
+      "mitigations=off"
     ];
     extraModprobeConfig = "options snd_hda_intel patch=gigabyte-realtek-alc883.fw";
     cleanTmpDir = true;
