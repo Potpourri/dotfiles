@@ -126,6 +126,7 @@ in
     # use binary package to escape rebuild from source
     firefox-bin
     libreoffice-fresh
+    sqlitebrowser
     #######################################
     # Shell/term apps
     #######################################
