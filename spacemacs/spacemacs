@@ -69,7 +69,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages
    '(
      pinentry
-     direnv
+     (direnv :location (recipe :fetcher github :repo "Potpourri/emacs-direnv"))
      ;; syntax
      (bazel-mode :location (recipe :fetcher github :repo "bazelbuild/emacs-bazel-mode"))
      (ats2-mode :location (recipe :fetcher github :repo "Potpourri/ats2-mode"))
