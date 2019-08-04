@@ -473,8 +473,15 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  (defun set-tab-width (width)
+    (setq-default tab-width width)
+    ;; python-mode overwrites tab-width
+    (add-hook 'python-mode-hook
+      (lambda ()
+        (setq tab-width width)))
+  )
   ;; default text editing settings
-  (setq-default tab-width 2)
+  (set-tab-width 2)
   (setq fill-column 100)
 
   ;; EMMS
