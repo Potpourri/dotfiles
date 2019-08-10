@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+error() {
+	local msg="$1"
+	echo "$(tput setaf 1)ERROR:$(tput sgr0) $msg" >&2
+	exit 1
+}
+
+main() {
+	local gitdir
+	if (( "$EUID" == 0 )); then
+		error "This script must be run as regular user (non-root)"
+	fi
+	if [[ -d .git ]]; then
+		gitdir=.git
+	elif [[ -f .git ]]; then
+		gitdir="$(cat .git | cut -d' ' -f2)"
+	else
+		error "This script be run in root of git repo"
+	fi
+
+	du -sh "$gitdir"
+	git count-objects -v
+	echo
+
+	rm -rfv \
+		"$gitdir"/refs/original/ \
+		"$gitdir"/*_HEAD \
+		"$gitdir"/logs/
+	git for-each-ref --format="%(refname)" refs/original/ \
+		| xargs -n1 --no-run-if-empty git update-ref -d
+	git -c gc.reflogExpire=0 \
+		-c gc.reflogExpireUnreachable=0 \
+		-c gc.rerereresolved=0 \
+		-c gc.rerereunresolved=0 \
+		-c gc.pruneExpire=now \
+		gc
+	echo
+
+	du -sh "$gitdir"
+	git count-objects -v
+}
+
+main

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+error() {
+	local msg="$1"
+	echo "$(tput setaf 1)ERROR:$(tput sgr0) $msg" >&2
+	exit 1
+}
+
+info() {
+	local msg="$1"
+	echo "$(tput setaf 4)INFO:$(tput sgr0) $msg"
+}
+
+main() {
+	local unused_count
+	if (( "$EUID" == 0 )); then
+		error "This script must be run as regular user (non-root)"
+	fi
+	if [[ ! -d .git/annex ]]; then
+		error "This script be run in root of git-annex repo"
+	fi
+
+	du -sh .git/annex
+	echo
+
+	unused_count="$(git annex unused | wc -l)"
+	if (( "$unused_count" <= 1 )); then
+		info "Not found unused files"
+		exit
+	fi
+
+	git annex dropunused --force all
+	echo
+
+	du -sh .git/annex
+}
+
+main
