@@ -101,6 +101,20 @@ in
       PASSWORD_STORE_DIR = toString ../secrets;
       RCLONE_CONFIG = toString ../secrets/rclone/rclone.conf;
     };
+    shellAliases = {
+      ls0 = "ls -AhlF --color";
+      tree0 = "tree -ahC -I .git";
+      du0 = "du -sh";
+      grep0 = "grep --color";
+      diff0 = "diff -u --color";
+      git-no-sign = "git -c commit.gpgsign=false";
+      git-root = ''
+        git rev-parse &&\
+        _gd="$(git rev-parse --git-dir)" &&\
+        cd "''${_gd/.git*}". &&\
+        unset _gd
+      '';
+    };
   };
 
   environment.systemPackages = with pkgs; [
