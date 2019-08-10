@@ -151,6 +151,7 @@ in
     lsof
     direnv
     myPass
+    media-scripts
     # archivers:
     libarchive
     p7zip

@@ -188,4 +188,6 @@ in
   in
     super.python3.override myOverride;
   pywb = callPackage ../pkgs/pywb { };
+
+  media-scripts = callPackage ../pkgs/media-scripts { };
 }
