@@ -560,7 +560,7 @@ before packages are loaded."
   (defun umount-usb ()
     (interactive)
     (shell-command "udiskie-umount --all"))
-  (let (muted)
+  (let ((muted t))
     (defun mute-speakers ()
       (interactive)
       (if muted

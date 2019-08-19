@@ -233,6 +233,16 @@ in
         export _JAVA_AWT_WM_NONREPARENTING=1
         XDG_DATA_DIRS+=:~/.local/share
         ${pkgs.gnome3.gnome-settings-daemon}/libexec/gsd-xsettings &
+
+        #WORKAROUND: https://github.com/NixOS/nixpkgs/issues/54387
+        restore_alsa() {
+          while [[ -z "$(pidof pulseaudio)" ]]; do
+            sleep 0.5
+          done
+          alsactl -f ${toString ../alsa/asound.state} restore
+        }
+        restore_alsa &
+
         exec dbus-launch --exit-with-session emacs --fullscreen --eval "(exwm-enable)"
       '';
     };
@@ -244,19 +254,6 @@ in
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-
-  #WORKAROUND: https://github.com/NixOS/nixpkgs/issues/54387
-  systemd.services.alsa-restore = {
-    description = "Restore Sound Card State";
-    wantedBy = [ "multi-user.target" ];
-    unitConfig.RequiresMountsFor = "/var/lib/alsa";
-    unitConfig.ConditionVirtualization = "!systemd-nspawn";
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.alsaUtils}/sbin/alsactl restore 0";
-    };
-  };
 
   ##################################################################################################
   # Fonts
