@@ -239,6 +239,7 @@ in
           while [[ -z "$(pidof pulseaudio)" ]]; do
             sleep 0.5
           done
+          sleep 5
           alsactl -f ${toString ../alsa/asound.state} restore
         }
         restore_alsa &
