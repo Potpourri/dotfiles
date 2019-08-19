@@ -28,18 +28,16 @@ in
   });
   */
 
-  /*
   linuxPackages_latest = super.linuxPackages_latest.extend(_self: _super: {
-    nvidia_x11 = callPackage (import <nixpkgs/pkgs/os-specific/linux/nvidia-x11/generic.nix> {
-      version = "418.74";
-      sha256_64bit = "03qj42ppzkc9nphdr9zc12968bb8fc9cpcx5f66y29wnrgg3d1yw";
-      settingsSha256 = "15mbqdx5wyk7iq13kl2vd99lykpil618izwpi1kfldlabxdxsi9d";
-      persistencedSha256 = "0442qbby0r1b6l72wyw0b3iwvln6k20s6dn0zqlpxafnia9bvc8c";
+    nvidia_x11_beta = callPackage (import <nixpkgs/pkgs/os-specific/linux/nvidia-x11/generic.nix> {
+      version = "435.17";
+      sha256_64bit = "19p9v5km1kfw45ghqmzgawa2fdq559jj6h1dkbnkbbzhp2syq757";
+      settingsSha256 = "1i3bmsrgzwpahsgxyffly2hipxbparnr63c1xvb63wmivbad3fg9";
+      persistencedSha256 = "0pifk6nzbyr08hs6229v91jnawg0dgfcqyv1n4yl2fbaqcrw1bfq";
     }) {
       inherit (_self) kernel;
     };
   });
-  */
 
   /*
   linuxPackages_latest = super.linuxPackages_latest.extend(_self: _super: {
