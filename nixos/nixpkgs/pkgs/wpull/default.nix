@@ -1,9 +1,9 @@
 { fetchFromGitHub
-, python35Packages
+, python37Packages
 }:
 
 let
-  html5lib_1_0b8 = python35Packages.html5lib.overridePythonAttrs(oldA: rec {
+  html5lib_1_0b8 = python37Packages.html5lib.overridePythonAttrs(oldA: rec {
     name = "${oldA.pname}-${version}";
     version = "1.0b8";
     src = oldA.src.override {
@@ -15,7 +15,7 @@ let
 
 in
 
-python35Packages.buildPythonPackage rec {
+python37Packages.buildPythonPackage rec {
   pname = "wpull";
   version = "2.0.3";
 
@@ -26,11 +26,13 @@ python35Packages.buildPythonPackage rec {
     sha256 = "0d0kx500l4c14b53p7p0v6za4rcc27s8g4mf5bb6n3s6xfvzz84v";
   };
 
-  patchPhase = ''
+  patches = [ ./python37.patch ];
+
+  postPatch = ''
     substituteInPlace setup.py --replace dnspython3 dnspython
   '';
 
-  propagatedBuildInputs = with python35Packages; [
+  propagatedBuildInputs = with python37Packages; [
     chardet
     dnspython
     html5lib_1_0b8

@@ -1,0 +1,26 @@
+From bd2d2ba055d8831c480284ccb6807bf7e71cd0eb Mon Sep 17 00:00:00 2001
+From: Francisco Guerreiro <46813753+francisg-gc@users.noreply.github.com>
+Date: Fri, 3 May 2019 12:57:39 +0100
+Subject: [PATCH] async is now a reserved keyword so using getattr to call
+ method using a different name
+
+---
+ wpull/driver/process.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/wpull/driver/process.py b/wpull/driver/process.py
+index e370538..94f7f7c 100644
+--- a/wpull/driver/process.py
++++ b/wpull/driver/process.py
+@@ -53,8 +53,9 @@ def start(self, use_atexit=True):
+         )
+         self._process = yield from process_future
+ 
+-        self._stderr_reader = asyncio.async(self._read_stderr())
+-        self._stdout_reader = asyncio.async(self._read_stdout())
++        _async=getattr(asyncio, 'async')
++        self._stderr_reader = _async(self._read_stderr())
++        self._stdout_reader = _async(self._read_stdout())
+ 
+         if use_atexit:
+             atexit.register(self.close)
