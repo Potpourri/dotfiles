@@ -7,9 +7,12 @@ stdenv.mkDerivation rec {
   version = "0.1.0";
   src = ./.;
 
-  buildInputs = [ nix-prefetch-git ];
+  patchPhase = ''
+    substituteInPlace update-pinned-nixpkgs --replace 'nix-prefetch-git' \
+      '${nix-prefetch-git}/bin/nix-prefetch-git'
+  '';
 
   installPhase = ''
-    install -Dm755 $src/update-pinned-nixpkgs $out/bin/update-pinned-nixpkgs
+    install -Dm755 update-pinned-nixpkgs $out/bin/update-pinned-nixpkgs
   '';
 }
