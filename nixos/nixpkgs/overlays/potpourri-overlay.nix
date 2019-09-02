@@ -190,4 +190,6 @@ in
   pywb = callPackage ../pkgs/pywb { };
 
   media-scripts = callPackage ../pkgs/media-scripts { };
+
+  update-pinned-nixpkgs = callPackage ../pkgs/update-pinned-nixpkgs { };
 }

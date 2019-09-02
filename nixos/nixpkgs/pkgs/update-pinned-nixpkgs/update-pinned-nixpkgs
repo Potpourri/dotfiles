@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+error() {
+	local msg="$1"
+	echo "$(tput setaf 1)ERROR:$(tput sgr0) $msg" >&2
+	exit 1
+}
+
+success() {
+	local msg="$1"
+	echo "$(tput setaf 2)SUCCESS:$(tput sgr0) $msg"
+}
+
+main() {
+	local USAGE="usage: $0 [--only-nixpkgs OR --only-overlay]"
+	local update_nixpkgs=true
+	local update_overlay=true
+
+	if (( "$EUID" == 0 )); then
+		error "This script must be run as regular user (non-root)"
+	fi
+	if [[ "$PROJECT_ROOT" == "" ]]; then
+		error "This script must be run in Lorri\nix-shell project dir"
+	fi
+	if (( "$#" > 1 )); then
+		error "$USAGE"
+	fi
+
+	if (( "$#" == 1 )); then
+		case "$1" in
+			--only-nixpkgs)
+				update_overlay=false
+				;;
+			--only-overlay)
+				update_nixpkgs=true
+				;;
+			*)
+				error "$USAGE"
+				;;
+		esac
+	fi
+
+	if [[ "$update_nixpkgs" ]]; then
+		nix-prefetch-git "$MY_NIXPKGS_URL" "refs/heads/$MY_NIXPKGS_REF" \
+		> "$PROJECT_ROOT/tools/nixpkgs-version.json"
+		success "Nixpkgs updated"
+	fi
+	if [[ "$update_overlay" ]]; then
+		nix-prefetch-git "$MY_OVERLAY_URL" "refs/heads/$MY_OVERLAY_REF" \
+		> "$PROJECT_ROOT/tools/potpourri-overlay-version.json"
+		success "Potpourri's overlay updated"
+	fi
+}
+
+main "$@"
