@@ -33,7 +33,7 @@ main() {
 				update_overlay=false
 				;;
 			--only-overlay)
-				update_nixpkgs=true
+				update_nixpkgs=false
 				;;
 			*)
 				error "$USAGE"
