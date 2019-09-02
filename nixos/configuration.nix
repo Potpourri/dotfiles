@@ -151,7 +151,10 @@ in
     lsof
     direnv
     myPass
+    # media toolset:
     media-scripts
+    ffmpeg_4
+    imagemagick7
     # archivers:
     libarchive
     p7zip
