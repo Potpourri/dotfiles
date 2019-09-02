@@ -41,12 +41,12 @@ main() {
 		esac
 	fi
 
-	if [[ "$update_nixpkgs" ]]; then
+	if [[ "$update_nixpkgs" == true ]]; then
 		nix-prefetch-git "$MY_NIXPKGS_URL" "refs/heads/$MY_NIXPKGS_REF" \
 		> "$PROJECT_ROOT/tools/nixpkgs-version.json"
 		success "Nixpkgs updated"
 	fi
-	if [[ "$update_overlay" ]]; then
+	if [[ "$update_overlay" == true ]]; then
 		nix-prefetch-git "$MY_OVERLAY_URL" "refs/heads/$MY_OVERLAY_REF" \
 		> "$PROJECT_ROOT/tools/potpourri-overlay-version.json"
 		success "Potpourri's overlay updated"
