@@ -181,6 +181,8 @@ in
         surt = self.callPackage ../pkgs/python-modules/surt { };
         warcio = self.callPackage ../pkgs/python-modules/warcio { };
         wsgiprox = self.callPackage ../pkgs/python-modules/wsgiprox { };
+        #WORKAROUND: new pkg - flake8 plugin
+        flake8-tabs = self.callPackage ../pkgs/python-modules/flake8-tabs { };
       };
     };
   in
