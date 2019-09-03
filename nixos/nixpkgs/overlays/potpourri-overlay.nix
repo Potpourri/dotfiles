@@ -92,6 +92,7 @@ in
     postBuild = null;
   });
 
+  #WORKAROUND: only > 3.0.0-alpha2 support color output
   shfmt = callPackage ../pkgs/shfmt { };
 
   # new packages
