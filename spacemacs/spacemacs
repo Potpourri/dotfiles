@@ -41,6 +41,7 @@ This function should only modify configuration layer settings."
      exwm
      helm
      syntax-checking
+     auto-completion
      (shell :variables
             shell-default-position 'full
             shell-default-shell 'eshell
@@ -54,9 +55,12 @@ This function should only modify configuration layer settings."
      ;; syntax
      emacs-lisp
      nixos
+     shell-scripts
      markdown
+     yaml
      html
      javascript
+     python
      )
 
    ;; List of additional packages that will be installed without being
@@ -473,16 +477,19 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  (defun set-tab-width (width)
-    (setq-default tab-width width)
-    ;; python-mode overwrites tab-width
+  ;;WORKAROUND: https://github.com/syl20bnr/spacemacs/issues/12416
+  (defun set-text-defaults (_tab-width _fill-column)
+    (setq-default tab-width _tab-width)
+    (setq fill-column _fill-column)
     (add-hook 'python-mode-hook
       (lambda ()
-        (setq tab-width width)))
-  )
+        (run-at-time "0.1 sec" nil
+          (lambda ()
+            (setq tab-width _tab-width)
+            (editorconfig-apply))))))
+
   ;; default text editing settings
-  (set-tab-width 2)
-  (setq fill-column 100)
+  (set-text-defaults 2 100)
 
   ;; EMMS
   (setq emms-source-file-default-directory "~/Music")
@@ -610,7 +617,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (direnv bazel-mode treemacs-projectile treemacs-evil treemacs ht pfuture lv transmission org-download org-brain nix-mode hl-todo evil-visual-mark-mode evil-nerd-commenter evil-magit eval-sexp-fu editorconfig doom-modeline eldoc-eval define-word aggressive-indent ace-link ivy smartparens goto-chg window-purpose imenu-list helm helm-core avy projectile magit f simple-httpd visual-fill-column pdf-tools xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tern tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pug-mode prettier-js popwin pinentry persp-mode pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-bullets open-junk-file neotree nameless multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide impatient-mode hungry-delete highlight-parentheses highlight-numbers highlight-indentation highlight helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-exwm helm-descbinds helm-css-scss helm-ag google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md font-lock+ flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exwm-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump dotenv-mode diminish counsel-projectile column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile ace-window ace-jump-helm-line)))
+    (yasnippet-snippets helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern dash-functional company-statistics company-shell company-nixos-options company-anaconda company auto-yasnippet ac-ispell auto-complete yapfify yaml-mode pytest pyenv-mode py-isort pippel pipenv pyvenv pip-requirements live-py-mode insert-shebang importmagic epc ctable concurrent deferred helm-pydoc flycheck-bashate fish-mode cython-mode blacken anaconda-mode pythonic direnv bazel-mode treemacs-projectile treemacs-evil treemacs ht pfuture lv transmission org-download org-brain nix-mode hl-todo evil-visual-mark-mode evil-nerd-commenter evil-magit eval-sexp-fu editorconfig doom-modeline eldoc-eval define-word aggressive-indent ace-link ivy smartparens goto-chg window-purpose imenu-list helm helm-core avy projectile magit f simple-httpd visual-fill-column pdf-tools xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tern tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pug-mode prettier-js popwin pinentry persp-mode pcre2el password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-bullets open-junk-file neotree nameless multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide impatient-mode hungry-delete highlight-parentheses highlight-numbers highlight-indentation highlight helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-nixos-options helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-exwm helm-descbinds helm-css-scss helm-ag google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md font-lock+ flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exwm-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump dotenv-mode diminish counsel-projectile column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile ace-window ace-jump-helm-line)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
