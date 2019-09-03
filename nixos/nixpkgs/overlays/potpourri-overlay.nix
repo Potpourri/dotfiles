@@ -183,6 +183,8 @@ in
         wsgiprox = self.callPackage ../pkgs/python-modules/wsgiprox { };
         #WORKAROUND: new pkg - flake8 plugin
         flake8-tabs = self.callPackage ../pkgs/python-modules/flake8-tabs { };
+        #WORKAROUND: new pkg - flake8 plugin
+        flake8-mypy = self.callPackage ../pkgs/python-modules/flake8-mypy { };
       };
     };
   in
