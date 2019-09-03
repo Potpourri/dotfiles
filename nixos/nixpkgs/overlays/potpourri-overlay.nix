@@ -92,6 +92,8 @@ in
     postBuild = null;
   });
 
+  shfmt = callPackage ../pkgs/shfmt { };
+
   # new packages
 
   #WORKAROUND: compile emms-print-metadata
@@ -130,7 +132,7 @@ in
     super.djvulibre
     super.python3
     # Image-Dired:
-    super.imagemagick
+    super.imagemagick7
     super.exiftool
     super.libjpeg
   ]);
