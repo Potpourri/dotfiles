@@ -17,29 +17,33 @@ info() {
 	echo "$(tput setaf 4)INFO:$(tput sgr0) $msg"
 }
 
-git-wrapper() {
+git-no-sign() {
 	git -c commit.gpgsign=false "$@"
 }
 
 main() {
 	local dotfiles_root
+
 	if (( "$EUID" == 0 )); then
 		error "This script must be run as regular user (non-root)"
 	fi
+
 	dotfiles_root="$( dirname "$( dirname "$( realpath "${BASH_SOURCE[0]}" )" )" )"
 	cd "$dotfiles_root"
 
 	if [[ "$(git status --porcelain --untracked-files=no --ignore-submodules)" ]]; then
 		error "'dotfiles' has uncommitted changes"
 	fi
+
 	cd secrets
 	if [[ "$(git status --porcelain)" ]]; then
 		error "'secrets' has uncommitted changes"
 	fi
 	cd -
+
 	if [[ "$(git status --porcelain | grep -E ' secrets$')" ]]; then
 		info "Updating 'secrets' submodule"
-		git-wrapper commit -am "Update 'secrets' submodule"
+		git-no-sign commit -am "Update 'secrets' submodule"
 	fi
 
 	info "Updating 'spacemacs/emacs.d' subtree"
@@ -47,12 +51,12 @@ main() {
 		-m "Merge 'spacemacs/emacs.d' subtree"
 
 	info "Updating 'spacemacs/emacs.d/private/local/exwm' subtree"
-	git-wrapper subtree pull --squash --prefix spacemacs/emacs.d/private/local/exwm spacemacs-os master \
-		-m "Merge 'spacemacs/emacs.d/private/local/exwm' subtree"
+	git-wrapper subtree pull --squash --prefix spacemacs/emacs.d/private/local/exwm spacemacs-os \
+		master -m "Merge 'spacemacs/emacs.d/private/local/exwm' subtree"
 
 	info "Updating 'spacemacs/emacs.d/private/local/media' subtree"
-	git-wrapper subtree pull --squash --prefix spacemacs/emacs.d/private/local/media spacemacs-emms master \
-		-m "Merge 'spacemacs/emacs.d/private/local/media' subtree"
+	git-wrapper subtree pull --squash --prefix spacemacs/emacs.d/private/local/media spacemacs-emms \
+		master -m "Merge 'spacemacs/emacs.d/private/local/media' subtree"
 
 	success "All subtree\submodules updated"
 }
