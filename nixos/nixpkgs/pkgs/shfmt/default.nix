@@ -7,7 +7,7 @@ buildGoPackage rec {
   version = "3.0.0-alpha2";
 
   goPackagePath = "mvdan.cc/sh";
-  subPackages = ["cmd/shfmt"];
+  subPackages = [ "cmd/shfmt" ];
 
   src = fetchFromGitHub {
     owner = "mvdan";
