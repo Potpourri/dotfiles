@@ -12,15 +12,21 @@ success() {
 	echo "$(tput setaf 2)SUCCESS:$(tput sgr0) $msg"
 }
 
+info() {
+	local msg="$1"
+	echo "$(tput setaf 4)INFO:$(tput sgr0) $msg"
+}
+
 main() {
 	local USAGE="usage: $0 [--only-nixpkgs OR --only-overlay]"
 	local update_nixpkgs=true
 	local update_overlay=true
+	local old_rev new_rev
 
 	if (( "$EUID" == 0 )); then
 		error "This script must be run as regular user (non-root)"
 	fi
-	if [[ "$PROJECT_ROOT" == "" ]]; then
+	if [[ -z "${PROJECT_ROOT:-}" ]]; then
 		error "This script must be run in Lorri\nix-shell project dir"
 	fi
 	if (( "$#" > 1 )); then
@@ -41,15 +47,41 @@ main() {
 		esac
 	fi
 
+	if [[ -z "${MY_NIXPKGS_JSON:-}" ]]; then
+		mkdir -p "$PROJECT_ROOT/tools"
+		local MY_NIXPKGS_JSON="$PROJECT_ROOT/tools/nixpkgs-version.json"
+	fi
+	if [[ -z "${MY_OVERLAY_JSON:-}" ]]; then
+		mkdir -p "$PROJECT_ROOT/tools"
+		local MY_OVERLAY_JSON="$PROJECT_ROOT/tools/overlay-version.json"
+	fi
+
 	if [[ "$update_nixpkgs" == true ]]; then
-		nix-prefetch-git "$MY_NIXPKGS_URL" "refs/heads/$MY_NIXPKGS_REF" \
-		> "$PROJECT_ROOT/tools/nixpkgs-version.json"
-		success "Nixpkgs updated"
+		old_rev=""
+		if [[ -f "$MY_NIXPKGS_JSON" ]]; then
+			old_rev="$(jq -r .rev "$MY_NIXPKGS_JSON")"
+		fi
+		nix-prefetch-git "$MY_NIXPKGS_URL" "refs/heads/$MY_NIXPKGS_REF" >"$MY_NIXPKGS_JSON"
+		new_rev="$(jq -r .rev "$MY_NIXPKGS_JSON")"
+		if [[ "$new_rev" != "$old_rev" ]]; then
+			success "Nixpkgs updated"
+		else
+			info "Nixpkgs already updated"
+		fi
+		echo
 	fi
 	if [[ "$update_overlay" == true ]]; then
-		nix-prefetch-git "$MY_OVERLAY_URL" "refs/heads/$MY_OVERLAY_REF" \
-		> "$PROJECT_ROOT/tools/potpourri-overlay-version.json"
-		success "Potpourri's overlay updated"
+		old_rev=""
+		if [[ -f "$MY_OVERLAY_JSON" ]]; then
+			old_rev="$(jq -r .rev "$MY_OVERLAY_JSON")"
+		fi
+		nix-prefetch-git "$MY_OVERLAY_URL" "refs/heads/$MY_OVERLAY_REF" >"$MY_OVERLAY_JSON"
+		new_rev="$(jq -r .rev "$MY_OVERLAY_JSON")"
+		if [[ "$new_rev" != "$old_rev" ]]; then
+			success "Overlay updated"
+		else
+			info "Overlay already updated"
+		fi
 	fi
 }
 
