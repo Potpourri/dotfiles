@@ -180,7 +180,7 @@ in
       source /run/current-system/sw/share/bash-completion/completions/pass-audit
       source /run/current-system/sw/share/bash-completion/completions/pass-update
       PATH+=:~/Projects/dotfiles/scripts
-      eval "$(direnv hook bash)"
+      [[ ! "$IN_NIX_SHELL" ]] && eval "$(direnv hook bash)"
     '';
     #WORKAROUND: fbterm's fix ($TERM = linux)
     promptInit = ''
