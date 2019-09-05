@@ -188,6 +188,8 @@ in
         flake8-tabs = self.callPackage ../pkgs/python-modules/flake8-tabs { };
         #WORKAROUND: new pkg - flake8 plugin
         flake8-mypy = self.callPackage ../pkgs/python-modules/flake8-mypy { };
+        #WORKAROUND: new pkg - flake8 plugin
+        flake8-docstrings = self.callPackage ../pkgs/python-modules/flake8-docstrings { };
       };
     };
   in
