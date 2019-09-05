@@ -201,4 +201,6 @@ in
   update-pinned-nixpkgs = callPackage ../pkgs/update-pinned-nixpkgs { };
 
   jscpd = callPackage ../pkgs/node-packages/jscpd { };
+
+  cspell = callPackage ../pkgs/node-packages/cspell { };
 }
