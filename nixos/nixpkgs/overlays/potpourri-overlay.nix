@@ -199,4 +199,6 @@ in
   media-scripts = callPackage ../pkgs/media-scripts { };
 
   update-pinned-nixpkgs = callPackage ../pkgs/update-pinned-nixpkgs { };
+
+  jscpd = callPackage ../pkgs/node-packages/jscpd { };
 }
