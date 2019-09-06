@@ -331,6 +331,10 @@ in
     };
   };
 
+  # RKN ban gonum.org
+  networking.extraHosts = ''
+    142.93.108.123 gonum.org www.gonum.org
+  '';
   networking.firewall = {
     enable = true;
     # open Transmission's port
