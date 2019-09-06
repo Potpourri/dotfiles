@@ -203,4 +203,6 @@ in
   jscpd = callPackage ../pkgs/node-packages/jscpd { };
 
   cspell = callPackage ../pkgs/node-packages/cspell { };
+
+  conform = callPackage ../pkgs/conform { };
 }
