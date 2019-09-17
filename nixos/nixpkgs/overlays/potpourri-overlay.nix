@@ -205,4 +205,6 @@ in
   cspell = callPackage ../pkgs/node-packages/cspell { };
 
   conform = callPackage ../pkgs/conform { };
+
+  docopt-sh = callPackage ../pkgs/docopt-sh { };
 }
