@@ -15,7 +15,7 @@
  # https://gist.github.com/GrenderG/fd4eb4c73eadad219b0ecb5f9345070a#file-emoji_scrap-py
  # and emoji_scrap_github.py
 -declare -A emojis=(
-+declare -A emojify.emojis=(
++declare -A emojify_emojis=(
      [":100:"]="\U1f4af"
      [":1234:"]="\U1f522"
      [":1st_place_medal:"]="\U1f947"
@@ -44,7 +44,7 @@
 -emojify_token () {
 -    local value=${emojis[$1]}
 +emojify.token () {
-+    local value=${emojify.emojis[$1]}
++    local value=${emojify_emojis[$1]}
      [[ -n $value ]] && echo -e "$value" || echo "$1"
  }
  
@@ -78,8 +78,8 @@
          echo 'Supported emojis:'
 -        for key in "${!emojis[@]}"; do
 -            echo -e "$key ${emojis[$key]}"
-+        for key in "${!emojify.emojis[@]}"; do
-+            echo -e "$key ${emojify.emojis[$key]}"
++        for key in "${!emojify_emojis[@]}"; do
++            echo -e "$key ${emojify_emojis[$key]}"
          done
      fi
      exit 0
