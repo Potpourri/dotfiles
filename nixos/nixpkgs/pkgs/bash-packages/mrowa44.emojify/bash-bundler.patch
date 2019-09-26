@@ -1,5 +1,5 @@
---- a/emojify	2019-09-26 15:33:29.766794114 +0300
-+++ b/emojify	2019-09-26 15:39:57.335491686 +0300
+--- a/emojify	2019-09-26 23:11:08.932692302 +0300
++++ b/emojify	2019-09-26 23:11:46.651697211 +0300
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env bash
 +# BEGIN mrowa44.emojify
@@ -63,38 +63,38 @@
  
                  # nothing changed. we still need the ending ':' as it might
                  # serve for an upcoming emoji 😁😁🎉🎉
-@@ -2845,7 +2845,7 @@
+@@ -2843,59 +2843,4 @@
+     emojified_line+=$current_token
+     echo "$emojified_line"
  }
- 
- # Function to print help info.
+-
+-# Function to print help info.
 -help () {
-+emojify.help () {
-     cat <<EOF
-     emojify - emoji on the command line 😱
- 
-@@ -2853,15 +2853,15 @@
- EOF
-     if [[ 'list' == "$1" ]]; then
-         echo 'Supported emojis:'
+-    cat <<EOF
+-    emojify - emoji on the command line 😱
+-
+-    USAGE: emojify [-h|--help] [-l|--list] TEXT
+-EOF
+-    if [[ 'list' == "$1" ]]; then
+-        echo 'Supported emojis:'
 -        for key in "${!emojis[@]}"; do
 -            echo -e "$key ${emojis[$key]}"
-+        for key in "${!emojify_emojis[@]}"; do
-+            echo -e "$key ${emojify_emojis[$key]}"
-         done
-     fi
-     exit 0
- }
- 
- # Checks the installed bash version to see if it's compatible with emojify
+-        done
+-    fi
+-    exit 0
+-}
+-
+-# Checks the installed bash version to see if it's compatible with emojify
 -check_version () {
-+emojify.check_version () {
-     if (( ${BASH_VERSION%%.*} >= 4 )); then
-         return
-     else
-@@ -2871,31 +2871,4 @@
-         exit 0
-     fi
- }
+-    if (( ${BASH_VERSION%%.*} >= 4 )); then
+-        return
+-    else
+-        echo -e "Oh my! That’s a very old version of bash you’re using, we don’t support that anymore :(\n" \
+-        "\nConsider upgrading it or, if you must use bash ${BASH_VERSION} download an old version of" \
+-        "emojify from here: https://github.com/mrowa44/emojify/blob/old_bash_support/emojify"
+-        exit 0
+-    fi
+-}
 -
 -# If arguments are provided on the command line then check for supported help
 -# options or process the arguments as emoji names.

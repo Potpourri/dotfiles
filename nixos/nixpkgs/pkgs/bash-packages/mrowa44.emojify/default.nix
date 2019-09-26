@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, coreutils
 }:
 
 let
@@ -19,13 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "05rz5wybpajvv46nxxzrvcr0q510krihwldgwg742sqgkvk1a0fm";
   };
 
-  buildInputs = [ coreutils ];
-
   patches = [ ./bash-bundler.patch ];
-
-  postPatchPhase = ''
-    substituteInPlace emojify --replace 'cat' '${coreutils}/bin/cat'
-  '';
 
   installPhase = ''
     install -m 0444 -D emojify "$out/share/bashlib/${author}.${package}.bash"
