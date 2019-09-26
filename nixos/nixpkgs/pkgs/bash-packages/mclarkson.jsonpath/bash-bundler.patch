@@ -1,0 +1,93 @@
+--- a/JSONPath.sh	2019-09-26 16:29:40.743537783 +0300
++++ b/JSONPath.sh	2019-09-26 16:29:06.595516559 +0300
+@@ -1,5 +1,7 @@
+-#!/usr/bin/env bash
+-
++# BEGIN mclarkson.jsonpath
++jsonpath() (
++set +o nounset
++trap - ERR
+ # ---------------------------------------------------------------------------
+ # GLOBALS
+ # ---------------------------------------------------------------------------
+@@ -73,7 +75,7 @@
+         json | brief
+     fi
+ 
+-  fi 
++  fi
+ }
+ 
+ # ---------------------------------------------------------------------------
+@@ -392,7 +394,7 @@
+             comma=","
+       ;;
+     esac
+-    i=i+1 
++    i=i+1
+   done
+ 
+   [[ -z $FILTER ]] && FILTER="$query[],]"
+@@ -415,7 +417,7 @@
+       do
+         parse_value "$1" "$index"
+         index=$((index+1))
+-        ary="$ary""$value" 
++        ary="$ary""$value"
+         read -r token
+         case "$token" in
+           ']') break ;;
+@@ -439,7 +441,7 @@
+   local obj=''
+   read -r token
+   case "$token" in
+-    '}') 
++    '}')
+          ;;
+     *)
+       while :
+@@ -455,7 +457,7 @@
+         esac
+         read -r token
+         parse_value "$1" "$key"
+-        obj="$obj$key:$value"        
++        obj="$obj$key:$value"
+         read -r token
+         case "$token" in
+           '}') break ;;
+@@ -505,7 +507,7 @@
+ 
+   if [[ $FLATTEN -eq 1 ]]; then
+     cat >"$STDINFILE2"
+-    
++
+     highest=9999
+ 
+     while read line; do
+@@ -530,11 +532,11 @@
+ 
+       prevpath=("${path[@]}")
+     done <"$STDINFILE2"
+-    
++
+     if [[ $highest -gt 0 ]]; then
+       sed -r 's/\[(([0-9]+|"[^"]+")[],]){'$((highest))'}(.*)/[\3/' \
+         "$STDINFILE2"
+-    else 
++    else
+       cat "$STDINFILE2"
+     fi
+   else
+@@ -849,9 +851,6 @@
+   exit 1
+ }
+ 
+-if ([ "$0" = "$BASH_SOURCE" ] || ! [ -n "$BASH_SOURCE" ]);
+-then
+-  main "$@"
+-fi
+-
+-# vi: expandtab sw=2 ts=2
++main "$@"
++)
++# END mclarkson.jsonpath
