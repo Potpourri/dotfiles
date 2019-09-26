@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, coreutils
 }:
 
 let
@@ -19,13 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "05nj48ycqlqr53hbsqg0kzq2sng8p0m7mypgag3zmb718jp80vq4";
   };
 
-  buildInputs = [ coreutils ];
-
   patches = [ ./bash-bundler.patch ];
-
-  postPatchPhase = ''
-    substituteInPlace ansi --replace 'cat' '${coreutils}/bin/cat'
-  '';
 
   installPhase = ''
     install -m 0444 -D ansi "$out/share/bashlib/${author}.${package}.bash"
