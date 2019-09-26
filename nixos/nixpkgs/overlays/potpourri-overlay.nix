@@ -210,5 +210,6 @@ in
 
   bashPackages = {
     fidian_ansi = callPackage ../pkgs/bash-packages/fidian.ansi { };
+    mrowa44_emojify = callPackage ../pkgs/bash-packages/mrowa44.emojify { };
   };
 }
