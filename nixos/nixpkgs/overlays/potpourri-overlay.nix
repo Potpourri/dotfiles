@@ -207,4 +207,8 @@ in
   conform = callPackage ../pkgs/conform { };
 
   docopt-sh = callPackage ../pkgs/docopt-sh { };
+
+  bashPackages = {
+    fidian_ansi = callPackage ../pkgs/bash-packages/fidian.ansi { };
+  };
 }

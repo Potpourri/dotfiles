@@ -1,0 +1,19 @@
+--- a/ansi	2019-09-26 15:10:38.856785128 +0300
++++ b/ansi	2019-09-26 15:07:02.569782640 +0300
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++# BEGIN fidian.ansi
+ #
+ # ANSI code generator
+ #
+@@ -1625,9 +1625,4 @@
+         printf '\n'
+     fi
+ }
+-
+-
+-# Run if not sourced
+-if [[ "$0" == "${BASH_SOURCE[0]}" ]]; then
+-    ansi "$@" || exit $?
+-fi
++# END fidian.ansi
