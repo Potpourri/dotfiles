@@ -2,8 +2,8 @@
 +++ b/JSONPath.sh	2019-09-28 20:37:08.006704618 +0300
 @@ -1,4 +1,6 @@
  # BEGIN mclarkson.jsonpath
-+# shellcheck disable=SC2034,SC2053,SC2128,SC2155,SC2184,SC2206
-+# shellcheck disable=SC2086,SC2162,SC2196,SC2001,SC2002,SC2006
++# shellcheck disable=SC2034,SC2053,SC2128,SC2155,SC2184,SC2206,SC2248
++# shellcheck disable=SC2086,SC2162,SC2196,SC2001,SC2002,SC2006,SC2249
  jsonpath() (
  set +o nounset
  trap - ERR
