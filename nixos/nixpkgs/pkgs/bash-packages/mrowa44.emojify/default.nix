@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "05rz5wybpajvv46nxxzrvcr0q510krihwldgwg742sqgkvk1a0fm";
   };
 
-  patches = [ ./bash-bundler.patch ];
+  patches = [
+    ./bash-bundler.patch
+    ./shellcheck.patch
+  ];
 
   installPhase = ''
     install -m 0444 -D emojify "$out/share/bashlib/${author}.${package}.bash"
