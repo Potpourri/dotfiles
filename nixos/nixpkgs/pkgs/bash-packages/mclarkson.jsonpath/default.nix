@@ -29,7 +29,10 @@ stdenv.mkDerivation rec {
     gnugrep
   ];
 
-  patches = [ ./bash-bundler.patch ];
+  patches = [
+    ./bash-bundler.patch
+    ./shellcheck.patch
+  ];
 
   postPatchPhase = ''
     substituteInPlace JSONPath.sh --replace 'cat' '${coreutils}/bin/cat'

@@ -1,0 +1,217 @@
+--- a/JSONPath.sh	2019-09-28 20:18:36.122409006 +0300
++++ b/JSONPath.sh	2019-09-28 20:37:08.006704618 +0300
+@@ -1,4 +1,6 @@
+ # BEGIN mclarkson.jsonpath
++# shellcheck disable=SC2034,SC2053,SC2128,SC2155,SC2184,SC2206
++# shellcheck disable=SC2086,SC2162,SC2196,SC2001,SC2002,SC2006
+ jsonpath() (
+ set +o nounset
+ trap - ERR
+@@ -276,10 +278,10 @@
+     case "${PATHTOKENS[i]}" in
+       '"') :
+       ;;
+-      '..') query+="$comma[^]]*"
++      '..') query+="${comma}[^]]*"
+             comma=
+       ;;
+-      '[*]') query+="$comma[^,]*"
++      '[*]') query+="${comma}[^,]*"
+              comma=","
+       ;;
+       '*') query+="$comma(\"[^\"]*\"|[0-9]+[^],]*)"
+@@ -298,49 +300,49 @@
+                           if [[ $elem == '?(@' ]]; then
+                             # To allow search on @.property such as:
+                             #   $..book[?(@.title==".*Book 1.*")]
+-                            query+="$comma[0-9]+[],][[:space:]\"]*${rhs//\"/}"
++                            query+="${comma}[0-9]+[],][[:space:]\"]*${rhs//\"/}"
+                           else
+                             # To allow search on @ (this node) such as:
+                             #   $..reviews[?(@==".*Fant.*")]
+-                            query+="$comma[0-9]+,\"$elem\"[],][[:space:]\"]*${rhs//\"/}"
++                            query+="${comma}[0-9]+,\"$elem\"[],][[:space:]\"]*${rhs//\"/}"
+                           fi
+                           FILTER="$query"
+                      ;;
+                    '>='|'>')  OPERATOR=">"
+                               RHS="$rhs"
+-                              query+="$comma[0-9]+,\"$elem\"[],][[:space:]\"]*"
++                              query+="${comma}[0-9]+,\"$elem\"[],][[:space:]\"]*"
+                               FILTER="$query"
+                      ;;
+                    '<='|'<')  OPERATOR="<"
+                               RHS="$rhs"
+-                              query+="$comma[0-9]+,\"$elem\"[],][[:space:]\"]*"
++                              query+="${comma}[0-9]+,\"$elem\"[],][[:space:]\"]*"
+                               FILTER="$query"
+                      ;;
+                  esac
+                else
+                  case $operator in
+                    '=='|'=')  OPERATOR=
+-                          query+="$comma[0-9]+,\"$elem\"[],][[:space:]\"]*$rhs"
++                          query+="${comma}[0-9]+,\"$elem\"[],][[:space:]\"]*$rhs"
+                           FILTER="$query"
+                      ;;
+                    '>=')  OPERATOR="-ge"
+                           RHS="$rhs"
+-                          query+="$comma[0-9]+,\"$elem\"[],][[:space:]\"]*"
++                          query+="${comma}[0-9]+,\"$elem\"[],][[:space:]\"]*"
+                           FILTER="$query"
+                      ;;
+                    '>')   OPERATOR="-gt"
+                           RHS="$rhs"
+-                          query+="$comma[0-9]+,\"$elem\"[],][[:space:]\"]*"
++                          query+="${comma}[0-9]+,\"$elem\"[],][[:space:]\"]*"
+                           FILTER="$query"
+                      ;;
+                    '<=')  OPERATOR="-le"
+                           RHS="$rhs"
+-                          query+="$comma[0-9]+,\"$elem\"[],][[:space:]\"]*"
++                          query+="${comma}[0-9]+,\"$elem\"[],][[:space:]\"]*"
+                           FILTER="$query"
+                      ;;
+                    '<')   OPERATOR="-lt"
+                           RHS="$rhs"
+-                          query+="$comma[0-9]+,\"$elem\"[],][[:space:]\"]*"
++                          query+="${comma}[0-9]+,\"$elem\"[],][[:space:]\"]*"
+                           FILTER="$query"
+                  esac
+                fi
+@@ -360,7 +362,7 @@
+               then
+                 if [[ ${PATHTOKENS[i]#*:} =~ : ]]; then
+                   INDEXMATCH_QUERY+=("${PATHTOKENS[i]}")
+-                  query+="$comma[^,]*"
++                  query+="${comma}[^,]*"
+                 else
+                   # Index in the range of 0-9 can be handled by regex
+                   query+="${comma}$(echo ${PATHTOKENS[i]} | \
+@@ -374,7 +376,7 @@
+                 fi
+               else
+                 INDEXMATCH_QUERY+=("${PATHTOKENS[i]}")
+-                query+="$comma[^,]*"
++                query+="${comma}[^,]*"
+               fi
+             else
+               a=${PATHTOKENS[i]#[}
+@@ -394,10 +396,10 @@
+             comma=","
+       ;;
+     esac
+-    i=i+1
++    i=$((i + 1))
+   done
+ 
+-  [[ -z $FILTER ]] && FILTER="$query[],]"
++  [[ -z $FILTER ]] && FILTER="${query}[],]"
+   [[ $DEBUG -eq 1 ]] && echo "FILTER=$FILTER"
+ }
+ 
+@@ -490,7 +492,7 @@
+        [ "$value" = '""' ] && isempty=1
+        ;;
+   esac
+-  [[ -z INCLEMPTY ]] && [ "$value" = '' ] && return
++  [[ -z $INCLEMPTY ]] && [ "$value" = '' ] && return
+   [ "$NO_HEAD" -eq 1 ] && [ -z "$jpath" ] && return
+ 
+   [ "$isleaf" -eq 1 ] && [ $isempty -eq 0 ] && print=1
+@@ -660,7 +662,7 @@
+             do
+               arrays[j]=
+               [[ -n ${closers[j]} ]] && {
+-                let indent=j*4
++                indent=$((j * 4))
+                 printf "\n%0${indent}s${closers[j]}" ""
+                 unset closers[j]
+                 comma[j]=
+@@ -674,7 +676,7 @@
+           do
+             arrays[j]=
+             [[ -n ${closers[j]} ]] && {
+-              let indent=j*4
++              indent=$((j * 4))
+               printf "\n%0${indent}s${closers[j]}" ""
+               unset closers[j]
+               comma[j]=
+@@ -696,7 +698,7 @@
+         do
+           arrays[i]=
+           [[ -n ${closers[i]} ]] && {
+-            let indent=i*4
++            indent=$((i * 4))
+             printf "\n%0${indent}s${closers[i]}" ""
+             unset closers[i]
+             comma[i]=
+@@ -722,25 +724,25 @@
+         if [[ ${path[i]} == '"'* ]]; then
+           # Object
+           [[ $i -ge $broken ]] && {
+-            let indent=i*4
++            indent=$((i * 4))
+             printf "${comma[i]}%0${indent}s{\n" ""
+             closers[i]='}'
+             comma[i]=
+           }
+-          let indent=(i+1)*4
++          indent=$(((i + 1) * 4))
+           printf "${comma[i]}%0${indent}s${path[i]}:\n" ""
+           comma[i]=",\n"
+         else
+           # Array
+           if [[ ${arrays[i]} != 1 ]]; then
+-            let indent=i*4
++            indent=$((i * 4))
+             printf "%0${indent}s" ""
+             echo "["
+             closers[i]=']'
+             arrays[i]=1
+             comma[i]=
+           else
+-            let indent=(i+1)*4
++            indent=$(((i + 1) * 4))
+             printf "\n%0${indent}s${closers[i-1]}" ""
+             direction=$DOWN
+             comma[i+1]=",\n"
+@@ -753,25 +755,25 @@
+       if [[ ${path[-1]} == '"'* ]]; then
+         # Object
+         [[ $direction -eq $DOWN ]] && {
+-          let indent=pathlen*4
++          indent=$((pathlen * 4))
+           printf "${comma[pathlen]}%0${indent}s{\n" ""
+           closers[pathlen]='}'
+           comma[pathlen]=
+         }
+-        let indent=(pathlen+1)*4
++        indent=$(((pathlen + 1) * 4))
+         printf "${comma[pathlen]}%0${indent}s" ""
+         echo -n "${path[-1]}:$value"
+         comma[pathlen]=",\n"
+       else
+         # Array
+         [[ ${arrays[i]} != 1 ]] && {
+-          let indent=(pathlen-0)*4
++          indent=$(((pathlen - 0) * 4))
+           printf "%0${indent}s[\n" ""
+           closers[pathlen]=']'
+           comma[pathlen]=
+           arrays[i]=1
+         }
+-        let indent=(pathlen+1)*4
++        indent=$(((pathlen + 1) * 4))
+         printf "${comma[pathlen]}%0${indent}s" ""
+         echo -n "$value"
+         comma[pathlen]=",\n"
+@@ -785,7 +787,7 @@
+ 
+     for i in `seq $((pathlen)) -1 0`
+     do
+-      let indent=i*4
++      indent=$((i * 4))
+       printf "\n%0${indent}s${closers[i]}" ""
+     done
+     echo
