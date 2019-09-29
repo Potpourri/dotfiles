@@ -10,6 +10,8 @@ python37Packages.buildPythonPackage rec {
     sha256 = "1k0fxivc803ayc32r6vxxip0xsg6bjw38m6kkf12r0crnz47jghl";
   };
 
+  patches = [ ./shasum.patch ];
+
   propagatedBuildInputs = with python37Packages; [
     docopt
     termcolor
