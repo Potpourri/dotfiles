@@ -172,6 +172,8 @@ in
 
   wpull = callPackage ../pkgs/wpull { };
 
+  pdoc3 = callPackage ../pkgs/pdoc3 { };
+
   #WORKAROUND: https://github.com/NixOS/nixpkgs/pull/52814
   python3 = let
     myOverride = {
